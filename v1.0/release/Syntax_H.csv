@@ -1,0 +1,220 @@
+﻿item,name,ext1st,extnxt,begin,end
+file,[cONTAINER]/[Name].h,"//#include ""[nAME].h""
+",,"#ifndef __[NAME]_H__
+#define __[NAME]_H__                                       /* 複数インクルード防止 */
+","#endif//__[NAME]_INTERNAL__
+"
+class,"typedef struct tag[Name] [NAME];
+",,,,
+b_enum,"typedef enum tag[Name] {
+","    [NAME],[->64][dESC]
+","    [NAME],[->64][dESC]
+",,"    [NAME]_NUM
+}[NAME];
+const TCHAR* [Name]_toString( [NAME] value );
+"
+c_enum,"typedef enum tag[Name] {
+","    [NAME],[->64][dESC]
+","    [NAME],[->64][dESC]
+",,"    [NAME]_NUM
+}[NAME];
+const TCHAR* [Name]_toString( [NAME] value );
+"
+i_enum,,,,,
+b_struct,"typedef struct tag[Name] {
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","typedef struct tag[Name] {
+    [TYPE] base;
+","}[NAME];
+"
+c_struct,"typedef struct tag[Name] {
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","typedef struct tag[Name] {
+    [TYPE] base;
+","}[NAME];
+"
+i_struct,,,,,
+constructor,"/** @memberof [NAME]
+ * @brief [NAME]クラスのデフォルトコンストラクタ
+ * @pre
+ * 対象オブジェクトの未初期化状態で、呼び出すこと。
+ * 本関数を呼び出していないときは、対象オブジェクトをアクセスしないこと
+ */
+#define [Name]_Init(","    .vTbl = NULL,\
+","    .base.vTbl = &g[Name]Vtbl,\
+","){\
+","}
+"
+attr_group,"[CONTAINER]* [Name]_Copy( [NAME]* p[Name], const [NAME]* pSource );
+/** @class [NAME]
+ * @extends [TYPE]
+ */
+typedef struct tag[Name]{
+","    const [Type]Vtbl* const vTbl;
+","    [CONTAINER] base;
+",,"}[NAME];
+"
+ctor_call,"){\
+    .base = [Container]_Init( [vALUE] ),\
+",_[nAME],", _[nAME]",_[nAME],[nAME]
+__s_attr,"    [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = [vALUE],\
+"
+__o_attr,"    [TYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = [vALUE],\
+"
+__r_attr,"    [TYPE][mODIFIER]* [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = [vALUE],\
+"
+_ms_attr,"    [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
+",P( _[vALUE] ),P( _[vALUE] ),"    [scope].[nAME] = [vALUE],\
+","    .[nAME] = P( [vALUE] ),\
+"
+_mo_attr,"    [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
+",P( _[vALUE] ),P( _[vALUE] ),"    [scope].[nAME] = [vALUE],\
+","    .[nAME] = P( [vALUE] ),\
+"
+_mr_attr,"    [tYPE]* [nAME][ [mODIFIER] ];[->64][dESC]
+",P( _[vALUE] ),P( _[vALUE] ),"    [scope].[nAME] = [vALUE],\
+","    .[nAME] = P( [vALUE] ),\
+"
+c_s_attr,"    const [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = [vALUE],\
+"
+c_o_attr,"    const [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = [vALUE],\
+"
+c_r_attr,"    const [tYPE][mODIFIER]* p[Name];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].p[Name] = [vALUE],\
+","    .[nAME] = [vALUE],\
+"
+cms_attr,"    const [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = P( [vALUE] ),\
+"
+cmo_attr,"    const [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = P( [vALUE] ),\
+"
+cmr_attr,"    const [tYPE]* [nAME][ [mODIFIER] ];[->64][dESC]
+",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+","    .[nAME] = P( [vALUE] ),\
+"
+s_s_attr,,,,,
+s_o_attr,,,,,
+s_r_attr,,,,,
+sms_attr,,,,,
+smo_attr,,,,,
+smr_attr,,,,,
+p_s_attr,,"[tYPE][modifier] [Container]_Get[Name]( const [CONTAINER]* p[Container] );
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], [tYPE][modifier] value );
+",,
+p_o_attr,,"[TYPE]* [Container]_Get[Name]( [CONTAINER]* p[Container] );
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], const [TYPE]* value );
+",,
+p_r_attr,,"[TYPE]* [Container]_Get[Name]( const [CONTAINER]* p[Container] );
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], [TYPE]* value );
+",,
+pms_attr,,"const [tYPE][modifier]* [Container]_Get[Name]( const [CONTAINER]* p[Container] );
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], const [tYPE][modifier]* value );
+",,
+pmo_attr,,"[TYPE]* [Container]_Get[Name]( [CONTAINER]* p[Container], UINT32 index );
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], const [TYPE]* value, UINT32 index );
+",,
+pmr_attr,,"[TYPE]* [Container]_Get[Name]( const [CONTAINER]* p[Container], UINT32 index );
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], [TYPE]* value, UINT32 index  );
+",,
+vptr_impl,"extern const [Container]Vtbl g[Type]Vtbl;
+",,,,
+__c_oper,,,,,
+__b_oper,,,,,
+vptr_decl,"typedef struct tag[Type]Vtbl{
+[nAME]}[Type]Vtbl;
+",", [modifier][tYPE]",", [modifier][tYPE]",    [tYPE] ( * const p[nAME] )( [CONTAINER]*," );
+"
+_ac_oper,[tYPE] [Container]_[nAME]( [CONTAINER]* p[Container],", [modifier][tYPE] [nAME]",", [modifier][tYPE] [nAME]"," );
+",
+_ab_oper,[tYPE] [Container]_[nAME]( [CONTAINER]* p[Container],", [modifier][tYPE] [nAME]",", [modifier][tYPE] [nAME]"," );
+",
+l_i_oper,,,,,
+l_c_oper,[tYPE] [Container]_[nAME]( [CONTAINER]* p[Container],", [modifier][tYPE] [nAME]",", [modifier][tYPE] [nAME]"," );
+",
+l_b_oper,[tYPE] [Container]_[nAME]( [CONTAINER]* p[Container],", [modifier][tYPE] [nAME]",", [modifier][tYPE] [nAME]"," );
+",
+lai_oper,,,,,
+vptr_call,,,,,
+s_i_oper,,,,,
+s_c_oper,[tYPE] [Container]_[nAME]( ,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]"," );
+",
+s_b_oper,[tYPE] [Container]_[nAME]( ,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]"," );
+",
+sai_oper,,,,,
+sab_oper,[tYPE] [Container]_[nAME]( ,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]"," );
+",
+event_decl,"typedef enum tag[Name]Event {
+","    [TYPE]_[NAME],[->64][dESC]
+","    [TYPE]_[NAME],[->64][dESC]
+",,"    [NAME]_EVENT_NUM
+}[NAME]_EVENT;
+const TCHAR* [Name]Event_toString( [NAME]_EVENT value );
+"
+state_decl,"#define [SCOPE]_[NAME] [->48]( 1 << [vALUE] )
+",#define [SCOPE]_[NAME] [->48]( [SCOPE]_[VALUE], | [SCOPE]_[VALUE],"#define [SCOPE]_[NAME] [->48]( 1 << ( 31 - [vALUE] ) )
+"," )
+"
+state_entry,,,,,
+state_exit,,,,,
+state_impl,,,,,
+transition,,,,,
+trans_top,,,,,
+branch,,,,,
+comment,/**< [nAME] [->32]*/," * [nAME]
+"," * [nAME]
+","/**
+"," */
+"
+action,,,,,
+param_dir,,,,,
+inheritance,,,,,
+template,,,,,
+statemachine,"#define __HD_STATE_MACHINE_INTERNAL__
+#include ""HdStateMachine.h""
+","    [TYPE][mODIFIER] mainStm;[->64][dESC]
+","    .mainStm = [Type]_Init(),\
+","/** @class [NAME]
+ * @extends HD_STATE_MACHINE
+ */
+typedef struct tag[Name] {
+    HD_STATE_MACHINE base;
+#define [NAME]_[TYPE][->48]STATE_TOP
+","}[NAME];
+#define [Name]_Init() {\
+    .base = HdStateMachine_Init(),\
+[vALUE]}
+"
+default_trans,,,,,
+substm_impl,,,,,
+substm_decl,"    .[nAME][tYPE] = [Type]_Init(),\
+","    [TYPE][mODIFIER] [nAME][tYPE];[->64][dESC]
+",,,
+history,"    UINT32 n[Name]History;
+","    .n[Name]History = 0,\
+",,,
+junction,"#error junction@name;
+",,,#error junction@begin,#error junction@end
+api_call,"BOOL [Type]_EventProc( [TYPE]* p[Type], [TYPE]_EVENT nEventId, void* pEventParams );
+BOOL [Type]_Start( [TYPE]* p[Type] );
+",#error XXXX,#error XXXX,#error XXXX,#error XXXX
+friend,"#define __[NAME]_INTERNAL__
+#include ""[nAME].h""
+","#endif//__[NAME]_H__
+#if !defined( [Name]_Init ) && ( defined( __[NAME]_INTERNAL__ ) ", || defined( __[NAME]_INTERNAL__ ) ,"#include ""[nAME].h""
+"," )
+"

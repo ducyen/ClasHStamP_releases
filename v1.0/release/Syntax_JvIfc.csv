@@ -1,0 +1,91 @@
+﻿item,name,ext1st,extnxt,begin,end
+file,[container]/[Name].java,"import [container].*;
+","import [container].*;
+","package [container];
+
+",
+inheritance,[tYPE], implements [nAME],", [nAME]", extends ,
+template,<[nAME]>,[nAME],", [nAME]",[nAME],[nAME]
+class,"
+[->][sCOPE] interface [nAME][mODIFIER][tYPE]
+[vALUE]",,,"[->]{
+","[->]}
+"
+b_enum,,,,,
+c_enum,,,,,
+i_enum,,,,,
+b_struct,,,,,
+c_struct,,,,,
+i_struct,,,,,
+constructor,,,,,
+attr_group,,,,,
+ctor_call,,,,,
+__s_attr,,,,,
+__o_attr,,,,,
+__r_attr,,,,,
+_ms_attr,,,,,
+_mo_attr,,,,,
+_mr_attr,,,,,
+c_s_attr,,,,,
+c_o_attr,,,,,
+c_r_attr,,,,,
+cms_attr,,,,,
+cmo_attr,,,,,
+cmr_attr,,,,,
+s_s_attr,,,,,
+s_o_attr,,,,,
+s_r_attr,,,,,
+sms_attr,,,,,
+smo_attr,,,,,
+smr_attr,,,,,
+p_s_attr,,,,,
+p_o_attr,,,,,
+p_r_attr,,,,,
+pms_attr,,,,,
+pmo_attr,,,,,
+pmr_attr,,,,,
+vptr_impl,,,,,
+__c_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+__b_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+vptr_decl,,,,,
+_ac_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+_ab_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+l_i_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+l_c_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+l_b_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+lai_oper,,,,,
+vptr_call,,,,,
+s_i_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+s_c_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+s_b_oper,[->][tYPE] [nAME](,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]",");
+",
+sai_oper,,,,,
+sab_oper,,,,,
+event_decl,,,,,
+state_decl,,,,,
+state_entry,,,,,
+state_exit,,,,,
+state_impl,,,,,
+transition,,,,,
+trans_top,,,,,
+branch,,,,,
+comment,,,,,
+action,,,,,
+param_dir,,,,0,.
+statemachine,,,,,
+default_trans,,,,,
+substm_impl,,,,,
+substm_decl,,,,,
+history,,,,,
+junction,,,,,
+api_call,,,,,
+friend,,,,,

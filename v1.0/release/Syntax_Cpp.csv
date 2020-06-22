@@ -1,0 +1,422 @@
+﻿item,name,ext1st,extnxt,begin,end
+file,[cONTAINER]/[Name].c,,"#include ""[Name].h""[->64][dESC]
+","#include ""CommonInclude.h""                                    /* 共通インクルード */
+#define __[NAME]_INTERNAL__                                   /* [NAME]の内部情報もアクセス許可 */
+#include ""[Name].h""                                           /* [NAME]のヘッダーインクルード */
+",
+class,,,,,
+b_enum,"/* [NAME]列挙型の値から文字列に変換する関数（デバッグ用） */
+const TCHAR* [Name]_toString( [NAME] value ){
+","    switch( value ){
+    case [NAME]: return _T( ""[NAME]"" );
+","    case [NAME]: return _T( ""[NAME]"" );
+",,"    default: return _T( ""[NAME]_UNKNOWN"" );
+    }
+}
+"
+c_enum,"/* [NAME]列挙型の値から文字列に変換する関数（デバッグ用） */
+const TCHAR* [Name]_toString( [NAME] value ){
+","    switch( value ){
+    case [NAME]: return _T( ""[NAME]"" );
+","    case [NAME]: return _T( ""[NAME]"" );
+",,"    default: return _T( ""[NAME]_UNKNOWN"" );
+    }
+}
+"
+i_enum,"typedef enum tag[Name] {
+","    [NAME],[->64][dESC]
+","    [NAME],[->64][dESC]
+",,"    [NAME]_NUM
+}[NAME];
+"
+b_struct,,,,,
+c_struct,,,,,
+i_struct,"typedef struct tag[Name] {
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","typedef struct tag[Name] {
+    [TYPE] base;
+","}[NAME];
+"
+constructor,"[CONTAINER]* [Name]_Copy( [NAME]* p[Name], const [NAME]* pSource ){
+",,,,"    return ( [CONTAINER]* )p[Name];
+}
+"
+attr_group,,,,,
+ctor_call,"    [Container]_Copy( &p[Name]->base, &pSource->base );
+",,,,
+__s_attr,,,,"    p[Container]->[nAME] = pSource->[nAME];
+","    p[Container]->[nAME] = pSource->[nAME];
+"
+__o_attr,,,,"    memcpy( &p[Container]->[nAME], &pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+","    memcpy( &p[Container]->[nAME], &pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+"
+__r_attr,,,,"    p[Container]->p[Name] = pSource->p[Name];
+","    p[Container]->p[Name] = pSource->p[Name];
+"
+_ms_attr,,,,"    memcpy( p[Container]->[nAME], pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+","    memcpy( p[Container]->[nAME], pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+"
+_mo_attr,,,,"    memcpy( p[Container]->[nAME], pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+","    memcpy( p[Container]->[nAME], pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+"
+_mr_attr,,,,"    memcpy( p[Container]->[nAME], pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+","    memcpy( p[Container]->[nAME], pSource->[nAME], sizeof( p[Container]->[nAME] ) );
+"
+c_s_attr,,,,,
+c_o_attr,,,,,
+c_r_attr,,,,,
+cms_attr,,,,,
+cmo_attr,,,,,
+cmr_attr,,,,,
+s_s_attr,"/** @private @static @memberof [CONTAINER] */
+static [tYPE][mODIFIER] [nAME] = [vALUE];[->64][dESC]
+",,,,"/** @private @static @memberof [CONTAINER] */
+static [tYPE][mODIFIER] [nAME];[->64][dESC]
+"
+s_o_attr,"/** @private @static @memberof [CONTAINER] */
+static [TYPE][mODIFIER] [nAME] = [vALUE];[->64][dESC]
+",,,,"/** @private @static @memberof [CONTAINER] */
+static [TYPE][mODIFIER] [nAME];[->64][dESC]
+"
+s_r_attr,"/** @private @static @memberof [CONTAINER] */
+static [TYPE][mODIFIER]* [nAME] = [vALUE];[->64][dESC]
+",,,,"/** @private @static @memberof [CONTAINER] */
+static [TYPE][mODIFIER]* [nAME];[->64][dESC]
+"
+sms_attr,"/** @private @static @memberof [CONTAINER] */
+static [tYPE] [nAME][ [mODIFIER] ] = [vALUE];[->64][dESC]
+",,,,"/** @private @static @memberof [CONTAINER] */
+static [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
+"
+smo_attr,"/** @private @static @memberof [CONTAINER] */
+static [TYPE] [nAME][ [mODIFIER] ] = [vALUE];[->64][dESC]
+",,,,"/** @private @static @memberof [CONTAINER] */
+static [TYPE] [nAME][ [mODIFIER] ];[->64][dESC]
+"
+smr_attr,"/** @private @static @memberof [CONTAINER] */
+static [TYPE]* [nAME][ [mODIFIER] ] = [vALUE];[->64][dESC]
+",,,,"/** @private @static @memberof [CONTAINER] */
+static [TYPE]* [nAME][ [mODIFIER] ];[->64][dESC]
+"
+p_s_attr,,"[tYPE][modifier] [Container]_Get[Name]( const [CONTAINER]* p[Container] ){
+    return p[Container]->[nAME];
+}
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], [tYPE][modifier] value ){
+    p[Container]->[nAME] = value;
+}
+",,
+p_o_attr,,"[TYPE]* [Container]_Get[Name]( [CONTAINER]* p[Container] ){
+    return &p[Container]->[nAME];
+}
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], const [TYPE]* value ){
+    *p[Container]->[nAME] = value;
+}
+",,
+p_r_attr,,"[TYPE]* [Container]_Get[Name]( const [CONTAINER]* p[Container] ){
+    return p[Container]->p[Name];
+}
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], [TYPE]* value ){
+    p[Container]->p[Name] = value;
+}
+",,
+pms_attr,,"const [tYPE][modifier]* [Container]_Get[Name]( const [CONTAINER]* p[Container] ){
+    return p[Container]->[nAME];
+}
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], const [tYPE][modifier]* value ){
+    memcpy( p[Container]->[nAME], value, sizeof( p[Container]->[nAME] ) );
+}
+",,
+pmo_attr,,"[TYPE]* [Container]_Get[Name]( [CONTAINER]* p[Container], UINT32 index ){
+    return &p[Container]->[nAME][ index ];
+}
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], const [TYPE]* value, UINT32 index ){
+    memcpy( p[Container]->[nAME][ index ], value, sizeof( [TYPE] ) );
+}
+",,
+pmr_attr,,"[TYPE]* [Container]_Get[Name]( const [CONTAINER]* p[Container], UINT32 index ){
+    return p[Container]->[nAME][ index ];
+}
+","void [Container]_Set[Name]( [CONTAINER]* p[Container], [TYPE]* value, UINT32 index  ){
+    p[Container]->[nAME][ index ] = value;
+}
+",,
+vptr_impl,"const [Container]Vtbl g[Type]Vtbl = {
+[nAME]};
+",,,"    .p[nAME][->32] = [Container]_[nAME],","
+"
+__c_oper,"/** @protected @memberof [CONTAINER] */
+static [tYPE] [Container]_[nAME](
+    [MODIFIER]* p[Modifier]",",
+    [modifier][tYPE] [nAME]",",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+__b_oper,"/** @public @memberof [CONTAINER] */
+static [tYPE] [Container]_[nAME](
+    [MODIFIER]* p[Modifier]",",
+    [modifier][tYPE] [nAME]",",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+vptr_decl,,,,,
+_ac_oper,"/** @protected @pure @memberof [CONTAINER] */
+[tYPE] [Container]_[nAME](
+    [CONTAINER]* p[Container]",",
+    [modifier][tYPE] [nAME]",",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+_ab_oper,"/** @public @pure @memberof [CONTAINER] */
+[tYPE] [Container]_[nAME](
+    [CONTAINER]* p[Container]",",
+    [modifier][tYPE] [nAME]",",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+l_i_oper,"/** @private @memberof [CONTAINER] */
+static [tYPE] [Container]_[nAME](
+    [CONTAINER]* p[Container]",",
+    [modifier][tYPE] [nAME]",",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+l_c_oper,"/** @protected @memberof [CONTAINER] */
+[tYPE] [Container]_[nAME](
+    [CONTAINER]* p[Container]",",
+    [modifier][tYPE] [nAME]",",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+l_b_oper,"/** @public @memberof [CONTAINER] */
+[tYPE] [Container]_[nAME](
+    [CONTAINER]* p[Container]",",
+    [modifier][tYPE] [nAME]",",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+lai_oper,[tYPE] [Container]_[nAME]( [CONTAINER]* p[Container],", [modifier][tYPE] [nAME]",", [modifier][tYPE] [nAME]"," );
+",
+vptr_call,"    if( p[Container]->vTbl == NULL || p[Container]->vTbl->p[nAME] == NULL ){ return ( [tYPE] )0; }
+    return p[Container]->vTbl->p[nAME]( p[Container]",", [nAME]",", [nAME]","    if( p[Container]->vTbl == NULL || p[Container]->vTbl->p[nAME] == NULL ){ return; }
+    p[Container]->vTbl->p[nAME]( p[Container]"," );
+"
+s_i_oper,"/** @private @static @memberof [CONTAINER] */
+STATIC [tYPE] [Container]_[nAME](
+",    [modifier][tYPE] [nAME],",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+s_c_oper,"[tYPE] [Container]_[nAME](
+",    [modifier][tYPE] [nAME],",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+s_b_oper,"[tYPE] [Container]_[nAME](
+",    [modifier][tYPE] [nAME],",
+    [modifier][tYPE] [nAME]","
+){
+","} /* [Container]_[nAME] */
+
+"
+sai_oper,STATIC [tYPE] [Container]_[nAME]( ,[modifier][tYPE] [nAME],", [modifier][tYPE] [nAME]"," );
+",
+sab_oper,,,,,
+event_decl,"const TCHAR* [Name]Event_toString( [NAME]_EVENT value ){
+","    switch( value ){
+    case [TYPE]_[NAME]: return _T( ""[NAME]"" );
+","    case [TYPE]_[NAME]: return _T( ""[NAME]"" );
+",,"    default: return _T( ""[NAME]_UNKNOWN"" );
+    }
+}
+"
+state_decl,,,,"static void [Scope]_BgnTrans( [TYPE] *p[Type], [SCOPE]* pStm, UINT32 targetState );
+static void [Scope]_EndTrans( [TYPE] *p[Type], [SCOPE]* pStm );
+static BOOL [Scope]_Reset( [TYPE]* p[Type], [SCOPE]* pStm, HD_STATE_MACHINE* pParentStm );
+static BOOL [Scope]_Abort( [TYPE]* p[Type], [SCOPE]* pStm );
+static BOOL [Scope]_EventProc( [TYPE]* p[Type], [SCOPE]* pStm, [TYPE]_EVENT nEventId, void* pEventParams );
+static BOOL [Scope]_RunToCompletion( [TYPE]* p[Type], [SCOPE]* pStm );
+",
+state_entry,"static void [Scope]_EndTrans( [TYPE] *p[Type], [SCOPE]* pStm ){
+    pStm->base.nCurrentState = pStm->base.nTargetState;
+    pStm->base.bIsExternTrans = FALSE;
+","    switch( pStm->base.nCurrentState ){
+    case [SCOPE]_[NAME]:[->32][Scope]_[Container]_Entry( p[Type], pStm ); break;
+","    case [SCOPE]_[NAME]:[->32][Scope]_[Container]_Entry( p[Type], pStm ); break;
+","[->]default: break;
+[->]}
+","[->]}
+"
+state_exit,"static void [Scope]_BgnTrans( [TYPE] *p[Type], [SCOPE]* pStm, UINT32 targetState ){
+    pStm->base.nTargetState = targetState;
+    pStm->base.nPseudostate = targetState;
+","    switch( pStm->base.nCurrentState ){
+    case [SCOPE]_[NAME]:[->32][Scope]_[Container]_Exit( p[Type], pStm ); break;
+","    case [SCOPE]_[NAME]:[->32][Scope]_[Container]_Exit( p[Type], pStm ); break;
+","[->]default: break;
+[->]}
+","[->]}
+"
+state_impl,"static BOOL [Scope]_Reset( [TYPE]* p[Type], [SCOPE]* pStm, HD_STATE_MACHINE* pParentStm ) {
+    if( pStm->base.nPseudostate == [SCOPE]_[SCOPE] ){
+        pStm->base.nPseudostate = [SCOPE]_[MODIFIER];
+    }
+    pStm->base.pParentStm = pParentStm;
+    return [Scope]_RunToCompletion( p[Type], pStm );
+}
+static BOOL [Scope]_Abort( [TYPE]* p[Type], [SCOPE]* pStm ) {
+    pStm->base.nSourceState = [SCOPE]_[SCOPE];
+    [Scope]_BgnTrans( p[Type], pStm, [SCOPE]_[SCOPE] );
+    [Scope]_EndTrans( p[Type], pStm );
+    return TRUE;
+}
+static BOOL [Scope]_EventProc( [TYPE]* p[Type], [SCOPE]* pStm, [TYPE]_EVENT nEventId, void* pEventParams ){
+    BOOL bResult = FALSE;
+    pStm->base.nLCAState = STATE_UNDEF;
+","    switch( pStm->base.nCurrentState ){
+    case [SCOPE]_[NAME]:[->48]bResult |= [Scope]_[Name]_EventProc( p[Type], pStm, nEventId, pEventParams ); break;
+","    case [SCOPE]_[NAME]:[->48]bResult |= [Scope]_[Name]_EventProc( p[Type], pStm, nEventId, pEventParams ); break;
+","[->]default: break;
+[->]}
+","[->]    [Scope]_RunToCompletion( p[Type], pStm );
+[->]    return bResult;
+[->]}
+"
+transition,"static void [Scope]_[Name]_Entry( [TYPE]* p[Type], [SCOPE]* pStm ){
+    if( HdStateMachine_Enterable( &pStm->base, [SCOPE]_[CONTAINER] ) ){
+        [Scope]_[Container]_Entry( p[Type], pStm );
+[vALUE]    }
+[mODIFIER]}
+static BOOL [Scope]_[Name]_EventProc( [TYPE]* p[Type], [SCOPE]* pStm, [TYPE]_EVENT nEventId, void* pEventParams ){
+    BOOL bResult = FALSE;
+    pStm->base.nSourceState = [SCOPE]_[NAME];
+","    switch( nEventId ){
+    case [TYPE]_[NAME]:{
+","    } break;
+    case [TYPE]_[NAME]:{
+","    } break;
+    default: break;
+    }
+","    return bResult ? bResult : [Scope]_[Container]_EventProc( p[Type], pStm, nEventId, pEventParams );
+}
+static void [Scope]_[Name]_Exit( [TYPE]* p[Type], [SCOPE]* pStm ){
+    if( HdStateMachine_Exitable( &pStm->base, [SCOPE]_[NAME] ) ){ 
+[vALUE]        [Scope]_[Container]_Exit( p[Type], pStm );
+    }
+}
+"
+trans_top,"static void [Scope]_[Name]_Entry( [TYPE]* p[Type], [SCOPE]* pStm ){
+    if( HdStateMachine_Enterable( &pStm->base, [SCOPE]_[SCOPE] ) ){
+[vALUE]    }
+[mODIFIER]}
+static BOOL [Scope]_[Name]_EventProc( [TYPE]* p[Type], [SCOPE]* pStm, [TYPE]_EVENT nEventId, void* pEventParams ){
+    BOOL bResult = FALSE;
+    pStm->base.nSourceState = [SCOPE]_[NAME];
+","    switch( nEventId ){
+    case [TYPE]_[NAME]:{
+","    } break;
+    case [TYPE]_[NAME]:{
+","    } break;
+    default: break;
+    }
+","    return bResult;
+}
+static void [Scope]_[Name]_Exit( [TYPE]* p[Type], [SCOPE]* pStm ){
+    if( HdStateMachine_Exitable( &pStm->base, [SCOPE]_[NAME] ) ){ 
+[vALUE]    }
+}
+"
+branch,"[->]else {
+","[->]if ([nAME]) {
+","[->]} else if ([nAME]) {
+","[->]} else {
+","[->]}
+"
+comment,/**< [nAME] [->32]*/," * [nAME]
+"," * [nAME]
+","/**
+"," */
+"
+action,"[->][NAME]_PARAMS* pParams = ( [NAME]_PARAMS* )pEventParams;
+","[->]pStm->base.bIsExternTrans = TRUE;
+","[->][nAME]
+","[->][Scope]_BgnTrans( p[Type], pStm, [SCOPE]_[NAME] );
+[mODIFIER][->][Scope]_EndTrans( p[Type], pStm );
+[->]bResult = TRUE;
+","[mODIFIER][->]bResult = TRUE;
+"
+param_dir,,,,-1,
+event_fire,,,,,
+event_done,,,,,
+api_impl,,,,,
+default_trans,"static BOOL [Scope]_StateDefaultTrans( [TYPE]* p[Type], [SCOPE]* pStm ){
+    BOOL bResult = FALSE;
+    pStm->base.nSourceState = pStm->base.nCurrentState;
+    pStm->base.nLCAState = STATE_UNDEF;
+","[->]switch( pStm->base.nPseudostate ){
+[->]case [SCOPE]_[NAME]:{
+","[->]} break;
+[->]case [SCOPE]_[NAME]:{
+","[->]} break;
+[->]default: break;
+[->]}
+","    return bResult;
+}
+static BOOL [Scope]_RunToCompletion( [TYPE]* p[Type], [SCOPE]* pStm ){
+    BOOL bResult;
+    do{
+        bResult = [Scope]_StateDefaultTrans( p[Type], pStm );
+    } while ( bResult );
+    return bResult;
+}
+"
+substm_impl,,"[->]if( !HdStateMachine_IsFinished( &pStm->[nAME].base ) ){ break; }
+","[->]bResult |= [Type]_EventProc( p[Container], &pStm->[nAME], nEventId, pEventParams );
+","[->][Type]_Reset( p[Container], &pStm->[nAME], &pStm->base );
+","[->][Type]_Abort( p[Container], &pStm->[nAME] );
+"
+substm_decl,,"[->]if( pStm->base.nTargetState == [SCOPE]_[NAME] ){
+[->]    pStm->base.nPseudostate = [SCOPE]_[VALUE];
+[->]}
+","[->]bResult |= [Type]_RunToCompletion( p[Container], &pStm->[nAME] );
+","[->]pStm->base.pParentStm->nPseudostate = pStm->base.pParentStm->nCurrentState | [SCOPE]_[VALUE];
+","[->]pStm->[nAME].base.nPseudostate = [SCOPE]_[VALUE];
+"
+history,,,"[->]pStm->n[Name]History = [SCOPE]_[VALUE];
+","[->][Scope]_BgnTrans( p[Type], pStm, pStm->n[Name]History );
+[mODIFIER][->][Scope]_EndTrans( p[Type], pStm );
+[->]bResult = TRUE;
+","[->]if( pStm->n[Name]History == [SCOPE]_[NAME] ){
+[->]    pStm->base.nPseudostate = [SCOPE]_[VALUE];    
+[->]}
+"
+junction,,"[->]pStm->base.nPseudostate = [SCOPE]_[VALUE];
+",,,
+api_call,"BOOL [Type]_EventProc( [TYPE]* p[Type], [TYPE]_EVENT nEventId, void* pEventParams ){
+    p[Type]->pEventParams = pEventParams;
+    return [Scope]_EventProc( p[Type], &p[Type]->mainStm, nEventId, pEventParams );
+}
+BOOL [Type]_Start( [TYPE]* p[Type] ){
+    [Scope]_Abort( p[Type], &p[Type]->mainStm );
+    return [Scope]_Reset( p[Type], &p[Type]->mainStm, NULL );
+}
+",,,,
+friend,,,,,

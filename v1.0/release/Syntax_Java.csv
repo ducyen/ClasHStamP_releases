@@ -1,0 +1,379 @@
+﻿item,name,ext1st,extnxt,begin,end
+file,[container]/[Name].java,"import [container].*;
+","import [container].*;
+","package [container];
+
+",
+inheritance, extends [tYPE], implements [nAME],", [nAME]",,
+template,<[nAME]>,[nAME],", [nAME]",[nAME],[nAME] extends [tYPE]
+class,"
+[->][sCOPE] class [nAME][mODIFIER][tYPE]
+[vALUE]",,,"[->]{
+","[->]}
+"
+b_enum,"public  enum [Name] {
+","    [NAME],[->64][dESC]
+","    [NAME],[->64][dESC]
+",,"    [NAME]_NUM
+};
+const TCHAR* [Name]_toString( [NAME] value );
+"
+c_enum,"protected  enum [Name] {
+","    [NAME],[->64][dESC]
+","    [NAME],[->64][dESC]
+",,"    [NAME]_NUM
+};
+"
+i_enum,"private enum [Name] {
+","    [NAME],[->64][dESC]
+","    [NAME],[->64][dESC]
+",,"    [NAME]_NUM
+};
+"
+b_struct,"public  struct [Name] {
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","public  struct [Name] extends [TYPE]{
+","[->]};
+"
+c_struct,"protected  struct [Name] {
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","protected  struct [Name] extends [TYPE]{
+","[->]};
+"
+i_struct,"private struct [Name] {
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","    [tYPE] [nAME][mODIFIER];[->64][dESC]
+","private struct [Name] extends [TYPE]{
+","};
+"
+constructor,[->]public  [Name](,,,"
+[->]){","
+[vALUE][->]}[->96]
+"
+attr_group,,,,,
+ctor_call,"
+[->]) {
+[->]    super( [vALUE] );
+","
+[->]    [tYPE] _[nAME]",",
+[->]    [tYPE] _[nAME]",_[nAME],[nAME]
+__s_attr,"[->][scope]  [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+__o_attr,"[->][scope]  [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+__r_attr,"[->][scope]  [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+_ms_attr,"    protected  [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+_mo_attr,"    protected  [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+_mr_attr,"    protected  [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+c_s_attr,"    protected  const [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+c_o_attr,"    protected  const [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+c_r_attr,"    protected  const [tYPE][mODIFIER] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+cms_attr,"    protected  const [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+cmo_attr,"    protected  const [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+cmr_attr,"    protected  const [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",[vALUE],", [vALUE]","
+[->][nAME] = [vALUE];","
+[->][nAME] = [vALUE];"
+s_s_attr,"    protected  static [tYPE][mODIFIER] [nAME];[->64][dESC]
+",,,,
+s_o_attr,"    protected  static [tYPE][mODIFIER] [nAME];[->64][dESC]
+",,,,
+s_r_attr,"    protected  static [tYPE][mODIFIER] [nAME];[->64][dESC]
+",,,,
+sms_attr,"    protected  static [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",,,,
+smo_attr,"    protected  static [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",,,,
+smr_attr,"    protected  static [tYPE][ [mODIFIER] ] [nAME];[->64][dESC]
+",,,,
+p_s_attr,    public  [tYPE][mODIFIER] [nAME],"get;
+","set;
+","{
+","}
+"
+p_o_attr,    public  [tYPE][mODIFIER] [nAME],"get;
+","set;
+","{
+","}
+"
+p_r_attr,    public  [tYPE][mODIFIER] [nAME],"get;
+","set;
+","{
+","}
+"
+pms_attr,    public  [tYPE][ [mODIFIER] ] [nAME],"get;
+","set;
+","{
+","}
+"
+pmo_attr,    public  [tYPE][ [mODIFIER] ] [nAME],"get;
+","set;
+","{
+","}
+"
+pmr_attr,    public  [tYPE][ [mODIFIER] ] [nAME],"get;
+","set;
+","{
+","}
+"
+vptr_impl,,,,,
+__c_oper,"[->]protected [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+
+"
+__b_oper,"[->]public [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+
+"
+vptr_decl,,,,,
+_ac_oper,"[->]protected [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+
+"
+_ab_oper,"[->]public [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+"
+l_i_oper,"[->]private [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+"
+l_c_oper,"[->]protected [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+"
+l_b_oper,"[->]public [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+"
+lai_oper,,,,,
+vptr_call,,,,,
+s_i_oper,"[->]private static [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+"
+s_c_oper,"[->]protected  static [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+"
+s_b_oper,"[->]public  static [tYPE] [nAME](
+",[->][modifier][tYPE] [nAME],",
+[->][modifier][tYPE] [nAME]","
+[->]){
+","[->]} /* [Container].[nAME] */
+"
+sai_oper,,,,,
+sab_oper,,,,,
+event_decl,"[->]public enum _EventId {
+","[->][NAME],
+","[->][NAME],
+",,"[->]    NUM
+[->]};
+"
+state_decl,,,,"[->]public static class [nAME] extends Pseudostate {
+[->]    private static Pseudostate singleInstance = new [nAME]();
+[->]    public static Pseudostate GetInstance() { return singleInstance; }
+[->]}
+",
+state_entry,,,,,
+state_exit,,,,,
+state_impl,"[->]public boolean Reset(Context pContext, Statemachine pParentStm, Pseudostate pEntryPoint) {
+[->]    if (!IsFinished()) {
+[->]        System.out.println(""Entered by entry point"");
+[->]        return false;
+[->]    }
+[->]    if (pEntryPoint == null) {
+[->]        m_pPseudostate = [mODIFIER].GetInstance();
+[->]    } else {
+[->]        m_pPseudostate = pEntryPoint;
+[->]    }
+[->]    m_pParentStm = pParentStm;
+[->]    return RunToCompletion(pContext);
+[->]}
+",,,,
+transition,"[->]public static class [nAME] extends [cONTAINER] {
+[->]    private static TopState singleInstance = new [nAME]();
+[->]    public static TopState GetInstance() { return singleInstance; }
+[->]    public void Entry(Context pContext, Statemachine pStm){
+[->]        if( pStm.IsEnterable(GetInstance()) ){
+[->]            super.Entry( pContext, pStm );
+[->]            System.out.println(GetInstance().getClass() + ""entry"");
+[vALUE][->]        }
+[->]    }
+[->]    public boolean EventProc( Context pContext, Statemachine pStm, int nEventId, EventParams pParams ){
+[->]        boolean bResult = false;
+[->]        pStm.m_pSourceState = GetInstance();
+","[->]    switch( _EventId.values()[nEventId] ){
+[->]    case [nAME]:{
+","[->]    } break;
+[->]    case [nAME]:{
+","[->]    } break;
+[->]    default: break;
+[->]    }
+","[->]        return bResult ? bResult : super.EventProc( pContext, pStm, nEventId, pParams );
+[->]    }
+[->]    public void Exit(Context pContext, Statemachine pStm) {
+[->]        if (pStm.IsExitable(GetInstance())) {
+[->]            System.out.println(GetInstance().getClass() + ""exit"");
+[vALUE][->]            super.Exit(pContext, pStm);
+[->]        }
+[->]    }
+[->]};
+"
+trans_top,"[->]public static class [nAME] extends [cONTAINER] {
+[->]    private static TopState singleInstance = new [nAME]();
+[->]    public static TopState GetInstance() { return singleInstance; }
+[->]    public void Entry(Context pContext, Statemachine pStm){
+[->]        if( pStm.IsEnterable(GetInstance()) ){
+[->]            System.out.println(GetInstance().getClass() + ""entry"");
+[vALUE][->]        }
+[->]    }
+[->]    public boolean EventProc( Context pContext, Statemachine pStm, int nEventId, EventParams pParams ){
+[->]        boolean bResult = false;
+[->]        pStm.m_pSourceState = GetInstance();
+","[->]    switch( _EventId.values()[nEventId] ){
+[->]    case [nAME]:{
+","[->]    } break;
+[->]    case [nAME]:{
+","[->]    } break;
+[->]    default: break;
+[->]    }
+","[->]        return bResult;
+[->]    }
+[->]    public void Exit(Context pContext, Statemachine pStm) {
+[->]        if (pStm.IsExitable(GetInstance())) {
+[->]            System.out.println(GetInstance().getClass() + ""exit"");
+[vALUE][->]        }
+[->]    }
+[->]};
+"
+branch,"[->]    else {
+","[->]    if ([nAME]) {
+","[->]    } else if ([nAME]) {
+","[->]    } else {
+","[->]    }
+"
+comment,/**< [nAME] [->32]*/," * [nAME]
+"," * [nAME]
+","/**
+"," */
+"
+action,"[->][NAME]_PARAMS pParams = ( [NAME]_PARAMS )pParams;
+","[->]    pStm.m_bIsExternTrans = true;
+","[->]    [nAME]
+","[->]    pStm.BgnTrans( pContext, [nAME].GetInstance() );
+[mODIFIER][->]    pStm.EndTrans( pContext );
+[->]    bResult = true;
+","[mODIFIER][->]    bResult = true;
+"
+param_dir,,,,0,.
+statemachine,"import base.*;
+","[->][tYPE][mODIFIER] mainStm = new [tYPE][mODIFIER]();[->64][dESC]
+",,"[->]static class [Name] extends Statemachine {
+[->]    public static class [tYPE] extends TopState {};
+","[->]};
+"
+default_trans,"[->]public boolean DefaultTrans( Context pContext ){
+[->]    boolean bResult = false;
+[->]    Statemachine pStm = this;
+[->]    do {
+","[->]    if (m_pCurrentState == [mODIFIER].GetInstance() && m_pPseudostate == [sCOPE].[nAME].GetInstance()) {
+","[->]    } else if (m_pCurrentState == [mODIFIER].GetInstance() && m_pPseudostate == [cONTAINER].[nAME].GetInstance()) {
+","[->]    } else {
+[->]    }
+","[->]    } while (false);
+[->]    return bResult;
+[->]}
+"
+substm_impl,"[->]    if (!(([cONTAINER])pStm).m_[nAME][sCOPE].IsIn([sCOPE].[vALUE].GetInstance())) { break; }
+","[->]    if( !m_[nAME][tYPE].IsFinished() ){ break; }
+","[->]    bResult |= (([sCOPE])pStm).m_[nAME][tYPE].EventProc( pContext, nEventId, pParams );
+","[->]    (([sCOPE])pStm).m_[nAME][tYPE].Reset( pContext, pStm, null );
+","[->]    (([sCOPE])pStm).m_[nAME][tYPE].Abort( pContext );
+"
+substm_decl,,"[->][tYPE][mODIFIER] m_[nAME][tYPE] = new [tYPE][mODIFIER]();[->64][dESC]
+",,"[->]    pStm.m_pParentStm.m_pPseudostate = [sCOPE].[vALUE].GetInstance();
+","[->]    (([cONTAINER])pStm).m_[nAME][sCOPE].Reset(pContext, pStm, [sCOPE].[vALUE].GetInstance());
+"
+history,"[->]TopState m_p[Name]History;
+","[->]m_p[Name]History( null ),\
+","[->]    (([sCOPE])pStm).m_p[Name]History = [vALUE].GetInstance();
+","[->]    if (( ( [sCOPE] )pStm ).m_p[nAME]History != null) {
+[->]        pStm.BgnTrans( pContext, ( ( [sCOPE] )pStm ).m_p[nAME]History );
+[mODIFIER][->]        pStm.EndTrans( pContext );
+[->]        bResult = true;
+[->]        break;
+[->]    }
+","[->]    pStm.BgnTrans( pContext, [cONTAINER].GetInstance(), [nAME].GetInstance() );
+[mODIFIER][->]    pStm.EndTrans( pContext );
+[->]    bResult = true;
+"
+junction,"[->]    pStm.m_pPseudostate = [sCOPE].[vALUE].GetInstance();
+","[->]    if (m_pPseudostate == [sCOPE].[nAME].GetInstance()) {
+","[->]    } else if (m_pPseudostate == [cONTAINER].[nAME].GetInstance()) {
+",,
+api_call,"[->]public boolean Start() {
+[->]        mainStm.Abort(this);
+[->]    return mainStm.Reset(this, null, null);
+[->]}
+[->]public boolean EventProc(int nEventId, EventParams pParams) {
+[->]    return mainStm.EventProc(this, nEventId, pParams);
+[->]}
+",,,"#error ""xxx""
+","#error ""xxx""
+"
+friend,,,,,
