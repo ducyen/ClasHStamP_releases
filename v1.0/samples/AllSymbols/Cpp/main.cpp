@@ -3,15 +3,15 @@
 
 int InputValue(char* pMsg);
 
-#include "Statemachine.h"  /* @todo Duc */
-#include "Context.hpp"
-#include "ContextImpl.hpp"
+#include "Generic/Statemachine.h"  /* @todo Duc */
+#include "Model/Context.hpp"
+#include "Model/ContextImpl.hpp"
 
 int InputValue(char* pMsg) {
     char n;
     std::cout << pMsg;
     std::cin  >> n;
-    return n - '0';
+    return n;
 }
 
 int main() {

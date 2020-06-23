@@ -1,8 +1,6 @@
 #ifndef __COMMON_INCLUDE_H__
 #define __COMMON_INCLUDE_H__                                        /* 複数インクルード防止 */
 
-#include <tchar.h>
-
 typedef unsigned long   uint32_t;
 typedef unsigned short  uint16_t;
 typedef unsigned char   uint8_t;
@@ -15,6 +13,8 @@ typedef unsigned long   UINT32;
 typedef unsigned short  UINT16;
 typedef unsigned char   UINT8;
 typedef int             BOOL;
+typedef char            TCHAR;
+#define _T(x)           x
 
 #define FALSE   ( 0 )
 #define TRUE    ( 1 )
@@ -27,5 +27,11 @@ typedef int             BOOL;
 #define UNREF( x )                  ( ( x ) = ( x ) )
 
 #define null                        ( ( void* )0 )
+#ifndef NULL
+#define NULL                        ( ( void* )0 )
+#endif
+
+#define P( ... )                    __VA_ARGS__
+
 
 #endif//__COMMON_INCLUDE_H__

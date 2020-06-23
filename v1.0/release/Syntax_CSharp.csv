@@ -232,12 +232,8 @@ state_exit,,,,,
 state_impl,"[->]public override bool Reset(Context pContext, Statemachine pParentStm, Pseudostate pEntryPoint) {
 [->]    if (!IsFinished()) {
 [->]        Console.WriteLine(""Entered by entry point"");
-[->]        return false;
-[->]    }
-[->]    if (pEntryPoint == null) {
-[->]        m_pPseudostate = [mODIFIER].GetInstance();
 [->]    } else {
-[->]        m_pPseudostate = pEntryPoint;
+[->]        m_pPseudostate = [mODIFIER].GetInstance();
 [->]    }
 [->]    m_pParentStm = pParentStm;
 [->]    return RunToCompletion(pContext);
@@ -345,7 +341,7 @@ substm_impl,"[->]    if (!(([cONTAINER])pStm).m_[nAME][sCOPE].IsIn([sCOPE].[vALU
 "
 substm_decl,,"[->][tYPE][mODIFIER] m_[nAME][tYPE] = new [tYPE][mODIFIER]();[->64][dESC]
 ",,"[->]    pStm.m_pParentStm.m_pPseudostate = [sCOPE].[vALUE].GetInstance();
-","[->]    (([cONTAINER])pStm).m_[nAME][sCOPE].Reset(pContext, pStm, [sCOPE].[vALUE].GetInstance());
+","[->]    (([cONTAINER])pStm).m_[nAME][sCOPE].m_pPseudostate = [sCOPE].[vALUE].GetInstance();
 "
 history,"[->]TopState m_p[Name]History;
 ","[->]m_p[Name]History( null ),\

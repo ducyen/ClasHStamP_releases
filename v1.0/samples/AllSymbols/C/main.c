@@ -10,6 +10,10 @@ int InputValue(char* pMsg) {
     char n;
     printf( pMsg );
     scanf_s( "%c", &n );
+    char c = 0;
+    while( c != '\n' ){
+        scanf_s( "%c", &c );
+    }
     return n - '0';
 }
 

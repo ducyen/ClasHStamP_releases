@@ -273,10 +273,9 @@ state_exit,"static void [Scope]_BgnTrans( [TYPE] *p[Type], [SCOPE]* pStm, UINT32
 ","}
 "
 state_impl,"static BOOL [Scope]_Reset( [TYPE]* p[Type], [SCOPE]* pStm, HD_STATE_MACHINE* pParentStm, UINT32 nEntryPoint ) {
-    if( nEntryPoint ){
-        pStm->base.nPseudostate = nEntryPoint;
-    }
-    if( pStm->base.nPseudostate == [SCOPE]_[NAME] ){
+    if( !HdStateMachine_IsFinished( &pStm->base ) ){
+        printf( ""Entered by entry point\n"" );
+    }else{
         pStm->base.nPseudostate = [SCOPE]_[MODIFIER];
     }
     pStm->base.pParentStm = pParentStm;
@@ -402,7 +401,7 @@ substm_impl,"[->]if( !IS_IN( pStm->[nAME][sCOPE].base.nCurrentState, [SCOPE]_[VA
 "
 substm_decl,,,"/* @todo need to remove substm_decl@extnxt */
 ","[->]pStm->base.pParentStm->nPseudostate = [SCOPE]_[VALUE];
-","[->][Scope]_Reset( p[Type], &pStm->[nAME][sCOPE], &pStm->base, [SCOPE]_[VALUE] );
+","[->]pStm->[nAME][sCOPE].base.nPseudostate = [SCOPE]_[VALUE];
 "
 history,,,"[->]pStm->n[Name]History = [SCOPE]_[VALUE];
 ","[->]if( pStm->n[Name]History ){

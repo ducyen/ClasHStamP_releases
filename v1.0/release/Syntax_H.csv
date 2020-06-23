@@ -60,51 +60,51 @@ ctor_call,"){\
     .base = [Container]_Init( [vALUE] ),\
 ",_[nAME],", _[nAME]",_[nAME],[nAME]
 __s_attr,"    [tYPE][mODIFIER] [nAME];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = [vALUE],\
 ","    .[nAME] = [vALUE],\
 "
 __o_attr,"    [TYPE][mODIFIER] [nAME];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
-","    .[nAME] = [vALUE],\
+",P( [vALUE] ),", P( [vALUE] )","    .[nAME] = P( [vALUE] ),\
+","    .[nAME] = P( [vALUE] ),\
 "
 __r_attr,"    [TYPE][mODIFIER]* [nAME];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = [vALUE],\
 ","    .[nAME] = [vALUE],\
 "
 _ms_attr,"    [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
-",P( _[vALUE] ),P( _[vALUE] ),"    [scope].[nAME] = [vALUE],\
+",P( _[vALUE] ),P( _[vALUE] ),"    .[nAME] = P( [vALUE] ),\
 ","    .[nAME] = P( [vALUE] ),\
 "
 _mo_attr,"    [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
-",P( _[vALUE] ),P( _[vALUE] ),"    [scope].[nAME] = [vALUE],\
+",P( _[vALUE] ),P( _[vALUE] ),"    .[nAME] = P( [vALUE] ),\
 ","    .[nAME] = P( [vALUE] ),\
 "
 _mr_attr,"    [tYPE]* [nAME][ [mODIFIER] ];[->64][dESC]
-",P( _[vALUE] ),P( _[vALUE] ),"    [scope].[nAME] = [vALUE],\
+",P( _[vALUE] ),P( _[vALUE] ),"    .[nAME] = P( [vALUE] ),\
 ","    .[nAME] = P( [vALUE] ),\
 "
 c_s_attr,"    const [tYPE][mODIFIER] [nAME];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = [vALUE],\
 ","    .[nAME] = [vALUE],\
 "
 c_o_attr,"    const [tYPE][mODIFIER] [nAME];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = [vALUE],\
 ","    .[nAME] = [vALUE],\
 "
 c_r_attr,"    const [tYPE][mODIFIER]* p[Name];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].p[Name] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = [vALUE],\
 ","    .[nAME] = [vALUE],\
 "
 cms_attr,"    const [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = P( [vALUE] ),\
 ","    .[nAME] = P( [vALUE] ),\
 "
 cmo_attr,"    const [tYPE] [nAME][ [mODIFIER] ];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = P( [vALUE] ),\
 ","    .[nAME] = P( [vALUE] ),\
 "
 cmr_attr,"    const [tYPE]* [nAME][ [mODIFIER] ];[->64][dESC]
-",[vALUE],", [vALUE]","    [scope].[nAME] = [vALUE],\
+",[vALUE],", [vALUE]","    .[nAME] = P( [vALUE] ),\
 ","    .[nAME] = P( [vALUE] ),\
 "
 s_s_attr,,,,,

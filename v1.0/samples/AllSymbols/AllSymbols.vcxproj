@@ -112,13 +112,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Cpp\Generic\Statemachine.h" />
     <ClInclude Include="Cpp\Interfaces\Interface1.hpp" />
     <ClInclude Include="Cpp\Interfaces\Interface2.hpp" />
     <ClInclude Include="Cpp\Model\AFriend.hpp" />
     <ClInclude Include="Cpp\Model\BaseClass.hpp" />
     <ClInclude Include="Cpp\Model\Context.hpp" />
     <ClInclude Include="Cpp\Model\ContextImpl.hpp" />
-    <ClInclude Include="Cpp\Statemachine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cpp\main.cpp" />

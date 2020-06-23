@@ -1,6 +1,6 @@
 ﻿item,name,ext1st,extnxt,begin,end
-file,[cONTAINER]/[Name].hpp,"#include ""[Name].hpp""[->64][dESC]
-","#include ""[Name].hpp""[->64][dESC]
+file,[cONTAINER]/[Name].hpp,"#include ""[cONTAINER]/[Name].hpp""[->64][dESC]
+","#include ""[cONTAINER]/[Name].hpp""[->64][dESC]
 ","#pragma once
 #include <iostream>
 #include <cassert>
@@ -214,12 +214,8 @@ state_exit,,,,,
 state_impl,"[->]virtual bool Reset(Context* pContext, Statemachine* pParentStm, StateBase* pEntryPoint) {
 [->]    if (!IsFinished()) {
 [->]        std::cout << ""Entered by entry point\n"";
-[->]        return false;
-[->]    }
-[->]    if (pEntryPoint == nullptr) {
-[->]        m_pPseudostate = [mODIFIER]::GetInstance();
 [->]    } else {
-[->]        m_pPseudostate = pEntryPoint;
+[->]        m_pPseudostate = [mODIFIER]::GetInstance();
 [->]    }
 [->]    m_pParentStm = pParentStm;
 [->]    return RunToCompletion(pContext);
@@ -227,13 +223,13 @@ state_impl,"[->]virtual bool Reset(Context* pContext, Statemachine* pParentStm, 
 ",,,,
 transition,"[->]class [nAME]: public [cONTAINER] { using TThisState = [nAME]; using TSuperState = [cONTAINER];
 [->]    public: static TopState* GetInstance() { static TThisState singleInstance; return &singleInstance; }
-[->]    virtual void Entry( [tYPE]* pContext, Statemachine* pStm ){
+[->]    virtual void Entry( Context* pContext, Statemachine* pStm ){
 [->]        if( pStm->IsEnterable<TThisState>() ){
 [->]            TSuperState::Entry( pContext, pStm );
 [->]            std::cout << typeid(this).name() << "" entry\n"";
 [vALUE][->]        }
 [->]    }
-[->]    virtual bool EventProc( [tYPE]* pContext, Statemachine* pStm, EventId nEventId, EventParams* pParams ){
+[->]    virtual bool EventProc( Context* pContext, Statemachine* pStm, EventId nEventId, EventParams* pParams ){
 [->]        bool bResult = false;
 [->]        pStm->m_pSourceState = TThisState::GetInstance();
 ","[->]    switch( nEventId ){
@@ -245,7 +241,7 @@ transition,"[->]class [nAME]: public [cONTAINER] { using TThisState = [nAME]; us
 [->]    }
 ","[->]        return bResult ? bResult : TSuperState::EventProc( pContext, pStm, nEventId, pParams );
 [->]    }
-[->]    virtual void Exit([tYPE]* pContext, Statemachine* pStm) {
+[->]    virtual void Exit(Context* pContext, Statemachine* pStm) {
 [->]        if (pStm->IsExitable<TThisState>()) {
 [->]            std::cout << typeid(this).name() << "" exit\n"";
 [vALUE][->]            TSuperState::Exit(pContext, pStm);
@@ -253,14 +249,14 @@ transition,"[->]class [nAME]: public [cONTAINER] { using TThisState = [nAME]; us
 [->]    }
 [->]};
 "
-trans_top,"[->]class [nAME]: public [cONTAINER] { using TThisState = [nAME]; using TSuperState = TopState;
+trans_top,"[->]class [nAME]: public [cONTAINER] { using TThisState = [nAME]; using TSuperState = [cONTAINER];
 [->]    public: static TopState* GetInstance() { static TThisState singleInstance; return &singleInstance; }
-[->]    virtual void Entry( [tYPE]* pContext, Statemachine* pStm ){
+[->]    virtual void Entry( Context* pContext, Statemachine* pStm ){
 [->]        if( pStm->IsEnterable<TThisState>() ){
 [->]            std::cout << typeid(this).name() << "" entry\n"";
 [vALUE][->]        }
 [->]    }
-[->]    virtual bool EventProc( [tYPE]* pContext, Statemachine* pStm, EventId nEventId, EventParams* pParams ){
+[->]    virtual bool EventProc( Context* pContext, Statemachine* pStm, EventId nEventId, EventParams* pParams ){
 [->]        bool bResult = false;
 [->]        pStm->m_pSourceState = TThisState::GetInstance();
 ","[->]    switch( nEventId ){
@@ -272,7 +268,7 @@ trans_top,"[->]class [nAME]: public [cONTAINER] { using TThisState = [nAME]; usi
 [->]    }
 ","[->]        return bResult;
 [->]    }
-[->]    virtual void Exit([tYPE]* pContext, Statemachine* pStm) {
+[->]    virtual void Exit(Context* pContext, Statemachine* pStm) {
 [->]        if (pStm->IsExitable<TThisState>()) {
 [->]            std::cout << typeid(this).name() << "" exit\n"";
 [vALUE][->]        }
@@ -298,10 +294,10 @@ action,"[->][NAME]_PARAMS* pParams = ( [NAME]_PARAMS* )pParams;
 [->]    bResult = true;
 ","[mODIFIER][->]    bResult = true;
 "
-param_dir,,,,,
+param_dir,,,,,/
 inheritance,public [tYPE],public [nAME],", public [nAME]",: ,", "
 template,template<[nAME]>,[nAME][mODIFIER],", [nAME][mODIFIER]",typename [nAME] [vALUE],[tYPE][mODIFIER] [nAME] [vALUE]
-statemachine,"#include ""StateMachine.h""
+statemachine,"#include ""Generic/Statemachine.h""
 ","    [tYPE][mODIFIER] mainStm;[->64][dESC]
 ",,"[->]class [Name]: public Statemachine {
 [->]public:
@@ -328,7 +324,7 @@ substm_impl,"[->]    if (!(([cONTAINER]*)pStm)->m_[nAME][sCOPE].IsIn<[sCOPE]::[v
 "
 substm_decl,,"[->][tYPE][mODIFIER] m_[nAME][tYPE];[->64][dESC]
 ",,"[->]    pStm->m_pParentStm->m_pPseudostate = [sCOPE]::[vALUE]::GetInstance();
-","[->]    (([cONTAINER]*)pStm)->m_[nAME][sCOPE].Reset(pContext, pStm, [sCOPE]::[vALUE]::GetInstance());
+","[->]    (([cONTAINER]*)pStm)->m_[nAME][sCOPE].m_pPseudostate = [sCOPE]::[vALUE]::GetInstance();
 "
 history,"[->]TopState* m_p[Name]History;
 ","[->]m_p[Name]History( nullptr ),\
