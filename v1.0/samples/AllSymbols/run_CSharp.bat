@@ -4,13 +4,21 @@ rem Batch file to run a sample of Astah API on Windows
 setlocal
 
 SET OUTPUT=CSharp
+
 SET PACKAGE=Model
 SET LANGUAGE=cs
 SET SYNTAX=%TOOL_DIR%\Syntax_CSharp.csv
-
 rem run
 java %JAVA_OPTS% stm.TMain %1 %2
 IF ERRORLEVEL 2 goto noJavaw
+
+SET PACKAGE=Interfaces
+SET LANGUAGE=cs
+SET SYNTAX=%TOOL_DIR%\Syntax_CsIfc.csv
+rem run
+java %JAVA_OPTS% stm.TMain %1 %2
+IF ERRORLEVEL 2 goto noJavaw
+
 pause
 goto end
 
