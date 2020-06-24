@@ -4,6 +4,7 @@ rem Batch file to run a sample of Astah API on Windows
 setlocal
 
 set ASTAH_HOME=C:\Program Files\astah-professional
+rem set PATH=%ASTAH_HOME%\jre\bin;%PATH%;
 SET TOOL_DIR=..\..\release
 SET PROJECT=Design.asta
 SET EXT_CODE_OPT=y
