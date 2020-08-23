@@ -1,0 +1,820 @@
+package stm;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.change_vision.jude.api.inf.model.IClass;
+import com.change_vision.jude.api.inf.model.IDiagram;
+import com.change_vision.jude.api.inf.model.IElement;
+import com.change_vision.jude.api.inf.model.IFinalState;
+import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.IPseudostate;
+import com.change_vision.jude.api.inf.model.IState;
+import com.change_vision.jude.api.inf.model.IStateMachine;
+import com.change_vision.jude.api.inf.model.IStateMachineDiagram;
+import com.change_vision.jude.api.inf.model.ITransition;
+import com.change_vision.jude.api.inf.model.IVertex;
+
+public class TStateGenerator extends TBaseGenerator {
+	private static IStateMachine m_iMainStm = null;
+	private IStateMachine m_iLocalStm = null;
+	private TTransGenerator m_transGen;
+	
+	/**
+	 * Constructor
+	 * @param stxCsv
+	 * @param iClass
+	 * @param writer
+	 * @param iStm
+	 */
+	public TStateGenerator(SyntaxCsv stxCsv, IClass iClass, Writer writer, IStateMachine iStm) {
+		super(stxCsv, iClass, writer);
+		m_iLocalStm = iStm;
+		// TODO Auto-generated constructor stub
+		// Find main state-machine, which has the same name as of target class
+		if (m_iMainStm == null) {
+			for (IDiagram iDgr: iClass.getDiagrams()) {
+				if (iDgr instanceof IStateMachineDiagram) {
+					IStateMachineDiagram iStmDgr = (IStateMachineDiagram)iDgr;
+					IStateMachine iCurStm = iStmDgr.getStateMachine();
+					if (Utils.strConvertToMixedCase(iStm.getName()).equals(Utils.strConvertToMixedCase(iClass.getName()))) {
+						m_iMainStm = iCurStm;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * getMainStm
+	 * @return
+	 */
+	public IStateMachine getMainStm() {
+		return m_iMainStm;
+	}
+	/**
+	 * getLocalStm
+	 * @return
+	 */
+	public IStateMachine getLocalStm() {
+		return m_iLocalStm;
+	}
+	
+	/**
+	 * LeafStateTraverser
+	 * @author Duc
+	 *
+	 */
+	static private int m_nLeafStateCnt = 0;
+	private class LeafStateTraverser {
+		private List<String> traversedList = new ArrayList<String>();
+		private void traverse(IVertex iVtx) throws IOException, Exception {
+			if (isSimpleState(iVtx) || isSuperEntryPoint(iVtx) || 
+				isShallowHistory(iVtx) || isInitialPoint(iVtx) ||
+				isJunctionPoint(iVtx) || isSuperExitPoint(iVtx)
+			) {
+				String containerName = m_iLocalStm.getName();
+				if (iVtx.getContainer() != null) {
+					containerName = ((INamedElement)iVtx.getContainer()).getName();
+				}
+				/*
+				if (!isSimpleState(iVtx)) {
+					int value = m_nPseudostateCnt;
+					m_nPseudostateCnt++;
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_decl", "begin"), 
+						iVtx.getName(), 
+						m_iClass.getName(),
+						containerName,
+						String.format("%2d", value),
+						iVtx.getAlias1(),
+						iVtx.getDefinition(),
+						m_iLocalStm.getStateMachineDiagram().getName()
+					));
+				} else*/ {		/* pseudo-state only */
+					int value = m_nLeafStateCnt;
+					m_nLeafStateCnt++;
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_decl", "name"), 
+						iVtx.getName(), 
+						m_iClass.getName(),
+						containerName,
+						String.format("%2d", value),
+						iVtx.getAlias1(),
+						iVtx.getDefinition(),
+						m_iLocalStm.getStateMachineDiagram().getName()
+					));
+				}
+			}
+			if (iVtx instanceof IState) {
+				for (IVertex iSubvtx: ((IState)iVtx).getSubvertexes(0)) {
+					if (!traversedList.contains(iSubvtx.getName())) {
+						traverse(iSubvtx);
+						traversedList.add(iSubvtx.getName());
+					}
+				}
+				for (IVertex iSubvtx: ((IState)iVtx).getSubvertexes()) {
+					if (!traversedList.contains(iSubvtx.getName()) && isSuperExitPoint(iSubvtx)) {
+						traverse(iSubvtx);
+						traversedList.add(iSubvtx.getName());
+					}
+				}
+			}
+		}
+		public LeafStateTraverser(IStateMachine iStm) throws IOException, Exception {
+			for (IVertex iVtx: iStm.getVertexes()) {
+				if (!traversedList.contains(iVtx.getName())) {
+					traverse(iVtx);
+					traversedList.add(iVtx.getName());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * CompositeStateTraverser
+	 * @author Duc
+	 *
+	 */
+	private class CompositeStateTraverser {
+		private void traverse(IVertex iVtx) throws IOException, Exception {
+			if (iVtx instanceof IState) {
+				for (IVertex iSubvtx: ((IState)iVtx).getSubvertexes(0)) {
+					traverse(iSubvtx);
+				}
+			}
+			if (isCompositeState(iVtx)) {
+				IState iState = (IState)iVtx;
+				String containerName = m_iLocalStm.getName();
+				if (iVtx.getContainer() != null) {
+					containerName = ((INamedElement)iVtx.getContainer()).getName();
+				}
+				String path = m_stxCsv.get(indent, "state_decl", "ext1st");
+				for (IVertex iSubvtx: iState.getSubvertexes(0)) {
+					if (isSimpleState(iSubvtx) || isCompositeState(iSubvtx) || isInitialPoint(iSubvtx) || isSuperEntryPoint(iSubvtx) || isSuperExitPoint(iSubvtx)) {
+						m_writer.write(Utils.get(path, 
+							iState.getName(), 
+							m_iClass.getName(), 
+							containerName, 
+							iSubvtx.getName(), 
+							iState.getAlias1(), 
+							iState.getDefinition(),
+							m_iLocalStm.getStateMachineDiagram().getName()
+						));
+						path = m_stxCsv.get(indent, "state_decl", "extnxt");
+					}
+				}
+				m_writer.write(Utils.get(m_stxCsv.get(indent, "state_decl", "end"), 
+					iState.getName(), 
+					m_iClass.getName(), 
+					containerName, 
+					"", 
+					iState.getAlias1(), 
+					iState.getDefinition(),
+					m_iLocalStm.getStateMachineDiagram().getName()
+				));					
+			}
+		}
+		public CompositeStateTraverser(IStateMachine iStm) throws IOException, Exception {
+			for (IVertex iVtx: iStm.getVertexes()) {
+				traverse(iVtx);
+			}
+		}
+	}
+	
+	/**
+	 * printStateDecl
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public void printStateDeclarations() throws IOException, Exception {
+		// print top state
+		String path = m_stxCsv.get(indent, "state_decl", "ext1st");
+		for (IVertex iSubvtx: m_iLocalStm.getVertexes()) {
+			if (isSimpleState(iSubvtx) || isCompositeState(iSubvtx) || isInitialPoint(iSubvtx) || isSuperEntryPoint(iSubvtx) || isSuperExitPoint(iSubvtx)) {
+				m_writer.write(Utils.get(path, 
+					m_iLocalStm.getName(), 
+					m_iClass.getName(), 
+					"", 
+					iSubvtx.getName(), 
+					m_iLocalStm.getAlias1(), 
+					m_iLocalStm.getDefinition(),
+					m_iLocalStm.getStateMachineDiagram().getName()
+				));
+				path = m_stxCsv.get(indent, "state_decl", "extnxt");
+			}
+		}
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "state_decl", "end"), 
+			m_iLocalStm.getName(), 
+			m_iClass.getName(), 
+			"", 
+			"", 
+			m_iLocalStm.getAlias1(), 
+			m_iLocalStm.getDefinition(),
+			m_iLocalStm.getStateMachineDiagram().getName()
+		));					
+		
+		// print leaf states' declaration
+		new LeafStateTraverser(m_iLocalStm);		
+	
+		// print exit-point state
+		//new SubmstExitPtTraverser(m_iLocalStm);
+		
+		// print composite states
+		new CompositeStateTraverser(m_iLocalStm);
+	}
+
+	/**
+	 * AllStateTraverser
+	 * @author 3140327
+	 *
+	 */
+	private class AllStateTraverser {
+		private void checking(IState state) throws Exception {
+			printStateEntryProc(state);
+			m_transGen.printEventProc(state);
+			printStateExitProc(state);
+		}
+		private void traverse(IVertex iVtx) throws IOException, Exception {
+			if (iVtx instanceof IState && !(iVtx instanceof IFinalState)) {
+				checking((IState)iVtx);
+				for (IVertex iSubvtx: ((IState)iVtx).getSubvertexes(0)) {
+					traverse(iSubvtx);
+				}
+			}
+		}
+		public AllStateTraverser(IStateMachine iStm) throws IOException, Exception {
+			for (IVertex iVtx: iStm.getVertexes()) {
+				traverse(iVtx);
+			}
+		}
+	}
+	
+	/**
+	 * printStateImplementations
+	 * @param transGen
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public void printStateImplementations(TTransGenerator transGen) throws IOException, Exception {
+		m_transGen = transGen;
+		new AllStateTraverser(m_iLocalStm);
+	}
+	
+	/**
+	 * saveHistoryState
+	 * @param state
+	 * @return
+	 * @throws Exception
+	 */
+	private String saveHistoryState(IState state) throws Exception {
+		IElement containerElem = state.getContainer();
+		if (containerElem != null) {
+			IState container = (IState)containerElem;
+			for (IVertex iVtx: container.getSubvertexes(0)) {
+				if (iVtx instanceof IPseudostate && ((IPseudostate)iVtx).isShallowHistoryPseudostate()) {
+					String action = Utils.get(m_stxCsv.get(indent, "history", "extnxt"), 
+						container.getName(), 
+						m_iClass.getName(),
+						container.getName(),
+						state.getName(),
+						state.getAlias1(),
+						state.getDefinition(),
+						m_iLocalStm.getStateMachineDiagram().getName()
+					);
+					return action;
+				}
+			}
+		}
+		return "";
+	}
+	
+	/**
+	 * printStateEntryProc
+	 * @param state
+	 * @throws Exception
+	 */
+	String actions = "";
+	private void printStateEntryProc(IState state) throws Exception {
+		String containerName = m_iLocalStm.getName();
+		INamedElement container = (INamedElement)state.getContainer();
+		String m_path = "trans_top";
+		if (container != null) {
+			containerName = container.getName();
+			m_path = "transition";
+		}
+		// Collect actions
+		indent+=2;
+		actions = collectActions(0, state.getEntry());
+
+		// Reset sub-machines
+		if (state.isSubmachineState()) {
+			IState subMachine = state; 
+			actions += Utils.get(m_stxCsv.get(indent, "substm_impl", "begin"), 
+				subMachine.getName(), 
+				subMachine.getSubmachine().getStateMachineDiagram().getName(),
+				m_iClass.getName(),
+				subMachine.getName(),
+				subMachine.getAlias1(),
+				subMachine.getDefinition(),
+				m_iLocalStm.getStateMachineDiagram().getName()
+			);
+		}
+		
+        // for each orthogonal-state in this state
+		for (int nRegion = 1; nRegion < state.getRegionSize(); nRegion++) { // for each region except the first region
+			for (IVertex iVtx: state.getSubvertexes(nRegion)) {
+				// reset that orthogonal-state	      (substm_impl.begin)
+				if (iVtx instanceof IState && ((IState)iVtx).isSubmachineState()) {
+					IState subMachine = (IState)iVtx;
+					actions += Utils.get(m_stxCsv.get(indent, "substm_impl", "begin"), 
+						subMachine.getName(), 
+						subMachine.getSubmachine().getStateMachineDiagram().getName(),
+						m_iClass.getName(),
+						subMachine.getName(),
+						subMachine.getAlias1(),
+						subMachine.getDefinition(),
+						m_iLocalStm.getStateMachineDiagram().getName()
+					);
+				}
+			}
+		}		
+		// Set history state
+		actions += saveHistoryState(state);
+
+		indent-=1;
+		
+
+		indent-=1;
+		// Print Entry implementation
+		m_writer.write(Utils.get(m_stxCsv.get(indent, m_path, "name"), 
+			state.getName(), 
+			m_iClass.getName(), 
+			containerName, 
+			actions, 
+			"", 
+			"", 
+			m_iLocalStm.getStateMachineDiagram().getName()
+		));
+
+	}
+	
+	/**
+	 * printStateExitProc
+	 * @param state
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	private void printStateExitProc(IState state) throws IOException, Exception {
+		String containerName = m_iLocalStm.getName();
+		INamedElement container = (INamedElement)state.getContainer();
+		String m_path = "trans_top";
+		if (container != null) {
+			containerName = container.getName();
+			m_path = "transition";
+		}
+		// Print Exit implementation
+		indent+=2;
+		String actions = "";
+
+		// Reset sub-machines
+		if (state.isSubmachineState()) {
+			IState subMachine = state; 
+			actions += Utils.get(m_stxCsv.get(indent, "substm_impl", "end"), 
+				subMachine.getName(), 
+				subMachine.getSubmachine().getStateMachineDiagram().getName(),
+				m_iClass.getName(),
+				subMachine.getName(),
+				subMachine.getAlias1(),
+				subMachine.getDefinition(),
+				m_iLocalStm.getStateMachineDiagram().getName()
+			);
+		}
+		
+		// for each orthogonal-state in this state
+		for (int nRegion = 1; nRegion < state.getRegionSize(); nRegion++) { // for each region except the first region
+			for (IVertex iVtx: state.getSubvertexes(nRegion)) {
+				//   abort that orthogonal-state	      (substm_impl.end)
+				if (iVtx instanceof IState && ((IState)iVtx).isSubmachineState()) {
+					IState subMachine = (IState)iVtx;
+					actions += Utils.get(m_stxCsv.get(indent, "substm_impl", "end"), 
+						subMachine.getName(), 
+						subMachine.getSubmachine().getStateMachineDiagram().getName(),
+						m_iClass.getName(),
+						subMachine.getName(),
+						subMachine.getAlias1(),
+						subMachine.getDefinition(),
+						m_iLocalStm.getStateMachineDiagram().getName()
+					);
+				}
+			}
+		}			
+
+		actions += collectActions(0, state.getExit());
+
+		indent-=2;
+		m_writer.write(Utils.get(m_stxCsv.get(indent, m_path, "end"), 
+			state.getName(), 
+			m_iClass.getName(), 
+			containerName, 
+			actions, 
+			"", 
+			"", 
+			m_iLocalStm.getStateMachineDiagram().getName()
+		));
+	}
+
+	private String m_path = "trans_top";
+	private boolean m_bFirstRound = true;
+	/**
+	 * printTopEventProc
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public void printTopEventProc() throws IOException, Exception {
+		String initPtName = m_iLocalStm.getStateMachineDiagram().getName();
+		for (IVertex vertex: m_iLocalStm.getVertexes()) {
+			if (isInitialPoint(vertex)) {
+				initPtName = vertex.getName();
+				break;
+			}
+		}
+		String resetCode = generateSubmachineResetCode();
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "state_impl", "name"), m_iLocalStm.getName(), m_iClass.getName(), "", resetCode, initPtName, "", m_iLocalStm.getStateMachineDiagram().getName()));
+		indent++;
+		// Forward event to sub-machine if necessary
+		m_path = "trans_top";
+		m_bFirstRound = true;
+		
+		forwardEventToSubmachines();
+		
+        if (!m_bFirstRound) {
+            m_writer.write(
+                Utils.get(
+                    m_stxCsv.get(indent, m_path, "begin"), 
+                    "",
+                    m_iClass.getName(),
+                    "",
+                    "",
+                    "",
+                    "",
+                    m_iLocalStm.getStateMachineDiagram().getName()
+                )
+            );
+        }
+		// Print State-To-EventProc map
+		m_bFirstRound = true;
+		class StateTraverser {
+			private void checking(IState state) throws Exception {
+				if (m_bFirstRound) {
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_impl", "ext1st"), state.getName(), m_iClass.getName(), m_iLocalStm.getStateMachineDiagram().getName(), "", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+					m_bFirstRound = false;
+				} else {
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_impl", "extnxt"), state.getName(), m_iClass.getName(), m_iLocalStm.getStateMachineDiagram().getName(), "", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+				}
+			}
+			private void traverse(IVertex iVtx) throws IOException, Exception {
+				if (iVtx instanceof IState && !(iVtx instanceof IFinalState)) {
+					checking((IState)iVtx);
+					for (IVertex iSubvtx: ((IState)iVtx).getSubvertexes(0)) {
+						traverse(iSubvtx);
+					}
+				}
+			}
+			public StateTraverser(IStateMachine iStm) throws IOException, Exception {
+				for (IVertex iVtx: iStm.getVertexes()) {
+					traverse(iVtx);
+				}
+			}
+		}
+		new StateTraverser(m_iLocalStm);
+		if (!m_bFirstRound) {
+			m_writer.write(Utils.get(m_stxCsv.get(indent, "state_impl", "begin"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), "", "", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		}
+		/*
+		for (IState state: m_stmInfo.m_externMachineList.values()) {
+			INamedElement owner = (INamedElement)state.getSubmachine().getStateMachineDiagram().getContainer();
+			m_writer.write(Utils.get(m_stxCsv.get(indent, "ortho_state", "extnxt"), 
+				state.getName(), 
+				owner != null ? owner.getName() : "",
+				m_iClass.getName(),
+				"false",
+				state.getAlias1(),
+				state.getDefinition()
+			));
+		}
+		*/						
+		indent--;
+		
+		String isInCode = generateSubmachineIsInCode();
+		
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "state_impl", "end"), m_iLocalStm.getName(), m_iClass.getName(), "", isInCode, "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		
+	}
+
+	/**
+	 * printStateToEntryExitMap
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public void printStateToEntryExitMap() throws IOException, Exception {
+		// Print State-To-Entry map
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "state_entry", "name"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), "", "", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		indent++;
+		m_bFirstRound = true;
+		class StateEntryTraverser {
+			private void checking(IVertex state) throws Exception {
+				String containerName = m_iLocalStm.getName();
+				if (isSimpleState(state) || isCompositeState(state)) {
+					containerName = state.getName();
+				} else if (state.getContainer() != null) {
+					containerName = ((INamedElement)state.getContainer()).getName();
+				}
+				String myName = state.getName();
+				
+				if (m_bFirstRound) {
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_entry", "ext1st"), myName, m_iClass.getName(), containerName, "Entry", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+					m_bFirstRound = false;
+				} else {
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_entry", "extnxt"), myName, m_iClass.getName(), containerName, "Entry", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+				}
+			}
+			private void traverse(IVertex iVtx) throws IOException, Exception {
+				if (isSimpleState(iVtx) || isCompositeState(iVtx)) {
+					checking(iVtx);
+				}
+				if (iVtx instanceof IState) {
+					for (IVertex iSubvtx: ((IState)iVtx).getSubvertexes(0)) {
+						traverse(iSubvtx);
+					}
+				}
+			}
+			public StateEntryTraverser(IStateMachine iStm) throws IOException, Exception {
+				for (IVertex iVtx: iStm.getVertexes()) {
+					traverse(iVtx);
+				}
+			}
+		}
+		new StateEntryTraverser(m_iLocalStm);
+
+		if (!m_bFirstRound) {
+			m_writer.write(Utils.get(m_stxCsv.get(indent, "state_entry", "begin"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), "", "Entry", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		}
+		indent--;
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "state_entry", "end"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), "", "Entry", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		
+		// Print State-To-Exit map
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "state_exit", "name"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), "", "Exit", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		indent++;
+		m_bFirstRound = true;
+
+		class StateExitTraverser {
+			private void checking(IVertex state) throws Exception {
+				String containerName = m_iLocalStm.getName();
+				if (isSimpleState(state) || isCompositeState(state)) {
+					containerName = state.getName();
+				} else if (state.getContainer() != null) {
+					containerName = ((INamedElement)state.getContainer()).getName();
+				}
+				String myName = state.getName();
+				if (m_bFirstRound) {
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_exit", "ext1st"), myName, m_iClass.getName(), containerName, "Exit", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+					m_bFirstRound = false;
+				} else {
+					m_writer.write(Utils.get(m_stxCsv.get(indent, "state_exit", "extnxt"), myName, m_iClass.getName(), containerName, "Exit", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+				}
+			}
+			private void traverse(IVertex iVtx) throws IOException, Exception {
+				if (isSimpleState(iVtx) || isCompositeState(iVtx)) {
+					checking(iVtx);
+				}
+				if (iVtx instanceof IState) {
+					for (IVertex iSubvtx: ((IState)iVtx).getSubvertexes(0)) {
+						traverse(iSubvtx);
+					}
+				}
+			}
+			public StateExitTraverser(IStateMachine iStm) throws IOException, Exception {
+				for (IVertex iVtx: iStm.getVertexes()) {
+					traverse(iVtx);
+				}
+			}
+		}
+		new StateExitTraverser(m_iLocalStm);
+		if (!m_bFirstRound) {
+			m_writer.write(Utils.get(m_stxCsv.get(indent, "state_exit", "begin"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), "", "Exit", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		}
+		indent--;
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "state_exit", "end"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), "", "Exit", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		
+	}
+
+	/**
+	 * forwardEventToSubmachines() 
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	private void forwardEventToSubmachines() throws IOException, Exception {
+		class SubmachineStateShallowTraverser {
+			protected void checkStm(IState state) throws IOException, Exception {
+				m_writer.write(Utils.get(m_stxCsv.get(indent, "substm_impl", "extnxt"), 
+					state.getName(), 
+					state.getSubmachine().getStateMachineDiagram().getName(),
+					m_iClass.getName(),
+					"",
+			  		state.getAlias1(),
+					state.getDefinition(),
+					m_iLocalStm.getStateMachineDiagram().getName()
+				));
+			}			
+			private void traverse(IState iState) throws IOException, Exception {
+				for (IVertex iVtx: iState.getSubvertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+				if (iState.isSubmachineState()) {
+					checkStm(iState);
+				}
+			}
+			public SubmachineStateShallowTraverser(IStateMachine iStm) throws IOException, Exception {
+				for (IVertex iVtx: iStm.getVertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+			}
+		}
+		new SubmachineStateShallowTraverser(m_iLocalStm);
+	}
+	
+	/**
+	 * generateIsInCode() 
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	private String generateSubmachineIsInCode() throws IOException, Exception {
+		class SubmachineStateShallowTraverser {
+			public String value;
+			protected void checkStm(IState state) throws IOException, Exception {
+				value += (Utils.get(m_stxCsv.get(indent, "api_call", "extnxt"), 
+					state.getName(), 
+					state.getSubmachine().getStateMachineDiagram().getName(),
+					m_iClass.getName(),
+					"",
+			  		state.getAlias1(),
+					state.getDefinition(),
+					m_iLocalStm.getStateMachineDiagram().getName()
+				));
+			}			
+			private void traverse(IState iState) throws IOException, Exception {
+				for (IVertex iVtx: iState.getSubvertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+				if (iState.isSubmachineState()) {
+					checkStm(iState);
+				}
+			}
+			public SubmachineStateShallowTraverser(IStateMachine iStm) throws IOException, Exception {
+				value = "";
+				for (IVertex iVtx: iStm.getVertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+			}
+		}
+		return (new SubmachineStateShallowTraverser(m_iLocalStm)).value;
+	}
+
+	/**
+	 * generateSubmachineResetCode() 
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	private String generateSubmachineResetCode() throws IOException, Exception {
+		class SubmachineStateShallowTraverser {
+			public String value;
+			protected void checkStm(IState state) throws IOException, Exception {
+				value += (Utils.get(m_stxCsv.get(indent, "api_call", "begin"), 
+					state.getName(), 
+					state.getSubmachine().getName(),
+					m_iClass.getName(),
+					"",
+			  		state.getAlias1(),
+					state.getDefinition(),
+					state.getSubmachine().getStateMachineDiagram().getName()
+				));
+			}			
+			private void traverse(IState iState) throws IOException, Exception {
+				for (IVertex iVtx: iState.getSubvertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+				if (iState.isSubmachineState()) {
+					checkStm(iState);
+				}
+			}
+			public SubmachineStateShallowTraverser(IStateMachine iStm) throws IOException, Exception {
+				value = "";
+				for (IVertex iVtx: iStm.getVertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+			}
+		}
+		return (new SubmachineStateShallowTraverser(m_iLocalStm)).value;
+	}
+	
+	/**
+	 * printInitialStates
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public void printStatesDefaultTrans() throws IOException, Exception {
+		class StateWithDefTransTraverser {
+			protected void checkStm(IVertex state) throws IOException, Exception {
+				for (ITransition iDefTrans: state.getOutgoings()) {
+					if (iDefTrans.getEvent().isEmpty()) {
+						m_transGen.printDefaultTransition(iDefTrans, m_bFirstRound);
+						m_bFirstRound = false;
+					}
+				}
+			}			
+			private void traverse(IState iState) throws IOException, Exception {
+				for (IVertex iVtx: iState.getSubvertexes()) {
+					if (isSubExitPoint(iVtx)) {
+						checkStm(iVtx);
+					} 
+				}
+				for (IVertex iVtx: iState.getSubvertexes(0)) {
+					if (isSimpleState(iVtx) || isCompositeState(iVtx) || isJunctionPoint(iVtx) ||
+						isSuperEntryPoint(iVtx) || isInitialPoint(iVtx) || isShallowHistory(iVtx)
+					) {
+						checkStm(iVtx);
+					} 
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+			}
+			public StateWithDefTransTraverser(IStateMachine iStm) throws IOException, Exception {
+				for (IVertex iVtx: iStm.getVertexes()) {
+					if (isSimpleState(iVtx) || isCompositeState(iVtx) || isJunctionPoint(iVtx) || 
+						isSuperEntryPoint(iVtx) || isInitialPoint(iVtx) || isShallowHistory(iVtx)
+					) {
+						checkStm(iVtx);
+					} 
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+			}
+		}
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "default_trans", "name"), m_iLocalStm.getStateMachineDiagram().getName(), m_iClass.getName(), m_iLocalStm.getStateMachineDiagram().getName(), "Start", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		indent++;
+		class SubmachineStateShallowTraverser {
+			protected void checkStm(IState state) throws IOException, Exception {
+				m_writer.write(Utils.get(m_stxCsv.get(indent, "substm_decl", "extnxt"), 
+					state.getName(), 
+					state.getSubmachine().getStateMachineDiagram().getName(),
+					m_iClass.getName(),
+					"",
+			  		state.getAlias1(),
+					state.getDefinition(),
+					m_iLocalStm.getStateMachineDiagram().getName()
+				));
+			}			
+			private void traverse(IState iState) throws IOException, Exception {
+				for (IVertex iVtx: iState.getSubvertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+				if (iState.isSubmachineState()) {
+					checkStm(iState);
+				}
+			}
+			public SubmachineStateShallowTraverser(IStateMachine iStm) throws IOException, Exception {
+				for (IVertex iVtx: iStm.getVertexes()) {
+					if (iVtx instanceof IState) {
+						traverse((IState)iVtx);
+					}
+				}
+			}
+		}
+		new SubmachineStateShallowTraverser(m_iLocalStm);
+		m_bFirstRound = true;
+		new StateWithDefTransTraverser(m_iLocalStm);
+		//ee.enumEntryPoints(m_stm, false, m_entryPtImpl);
+		if (!m_bFirstRound) {
+			m_writer.write(Utils.get(m_stxCsv.get(indent, "default_trans", "begin"), m_iLocalStm.getName(), m_iClass.getName(), m_iLocalStm.getStateMachineDiagram().getName(), "", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+		}
+		indent --;
+		m_writer.write(Utils.get(m_stxCsv.get(indent, "default_trans", "end"), m_iLocalStm.getName(), m_iClass.getName(), m_iLocalStm.getStateMachineDiagram().getName(), "", "", "", m_iLocalStm.getStateMachineDiagram().getName()));
+	}
+}
