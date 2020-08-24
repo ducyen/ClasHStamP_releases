@@ -32,7 +32,12 @@ int main( void ){
         ContextImpl_Start( &context );
         do {
             n = InputValue( "Enter event number('q': quit, 'r':restart): E" );
-            ContextImpl_EventProc( &context, (ContextImpl_EVENT)n, NULL);
+            EventParams* pParams = NULL;
+            E1Params e1Params = { .x = Two };
+            if (n == ContextImpl_E1) {
+                pParams = &e1Params;
+            }
+            ContextImpl_EventProc( &context, (ContextImpl_EVENT)n, pParams);
         } while (n+'0' != 'q' && n+'0' != 'r');
     }while (n+'0' != 'q');
     return 0;

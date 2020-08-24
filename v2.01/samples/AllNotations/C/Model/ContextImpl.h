@@ -2,6 +2,17 @@
 #define __ContextImpl_H__
 #include "Context.h"
 typedef struct tagContextImpl ContextImpl;
+typedef enum tagAnEnum {
+    One,                                                        
+    Two,                                                        
+    Three,                                                      
+    AnEnum_NUM
+}AnEnum;
+const TCHAR* AnEnum_toString( AnEnum value );
+typedef struct tagE1Params {
+    EventParams base;
+    AnEnum x;                                                   
+}E1Params;
 typedef enum tagContextImplEvent {
     ContextImpl_E0,                                             
     ContextImpl_E1,                                             
@@ -12,12 +23,15 @@ typedef enum tagContextImplEvent {
     ContextImpl_EVENT_NUM
 }ContextImpl_EVENT;
 const TCHAR* ContextImplEvent_toString( ContextImpl_EVENT value );
+BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams );
+BOOL ContextImpl_Start( ContextImpl* pContextImpl );
 #endif//__ContextImpl_H__
 #if !defined( ContextImpl_Init ) && ( defined( __ContextImpl_INTERNAL__ )  || defined( __AFriend_INTERNAL__ )  || defined( __Main_INTERNAL__ )  )
 #define __Context_INTERNAL__
 #include "Context.h"
 #define __HdStateMachine_INTERNAL__
 #include "HdStateMachine.h"
+boolean ContextImpl_checkE1Params( EventParams* e );
 /** @class S82Stm
  * @extends HdStateMachine
  */
@@ -136,6 +150,4 @@ Context* ContextImpl_Copy( ContextImpl* pContextImpl, const ContextImpl* pSource
 typedef struct tagContextImpl{
     ContextImpl_CLASS    
 }ContextImpl;
-BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams );
-BOOL ContextImpl_Start( ContextImpl* pContextImpl );
 #endif//__ContextImpl_INTERNAL__

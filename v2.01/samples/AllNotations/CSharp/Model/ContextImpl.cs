@@ -7,6 +7,15 @@ using Base;
 namespace Model {
     public  class ContextImpl: Context
     {
+        public  enum AnEnum {
+            One,                                                
+            Two,                                                
+            Three,                                              
+            AN_ENUM_NUM
+        };
+        public  class E1Params: EventParams{
+            public AnEnum x;                                    
+        };
         public enum _EventId {
             E0,
             E1,
@@ -16,10 +25,25 @@ namespace Model {
             E5,
             ContextImplEventNum
         };
+        public bool Start() {
+            mainStm.Abort(this);
+            return mainStm.Reset(this, null, null);
+        }
+        public bool EventProc(int nEventId, EventParams pParams) {
+            return mainStm.EventProc(this, nEventId, pParams);
+        }
+        public bool IsIn(TopState pState) {
+            return mainStm.IsIn(pState);
+        }
         protected override void protectedMethod(
         ){
         } /* ContextImpl.protectedMethod */
 
+        protected  static boolean checkE1Params(
+            EventParams e
+        ){
+            return ((E1Params)e).x == AnEnum.Two;
+        } /* ContextImpl.checkE1Params */
         class S82Stm: Statemachine {
             public class S82Top: TopState {
                 private static TopState singleInstance = new S82Top();
@@ -58,6 +82,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.BgnTrans( pContext, S821.GetInstance() );
                         pStm.EndTrans( pContext );
                         bResult = true;
@@ -386,9 +411,12 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
-                        pStm.BgnTrans( pContext, S2.GetInstance(), InitPt1.GetInstance() );
-                        pStm.EndTrans( pContext );
-                        bResult = true;
+                        E1Params e = ( E1Params )pParams;
+                        if (checkE1Params(e)) {
+                            pStm.BgnTrans( pContext, S2.GetInstance(), InitPt1.GetInstance() );
+                            pStm.EndTrans( pContext );
+                            bResult = true;
+                        }
                     } break;
                     case _EventId.E2:{
                         int n = InputValue("Enter condition1: ");
@@ -487,6 +515,7 @@ namespace Model {
                         bResult = true;
                     } break;
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.BgnTrans( pContext, S3.GetInstance() );
                         pStm.EndTrans( pContext );
                         bResult = true;
@@ -602,6 +631,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.BgnTrans( pContext, S42.GetInstance() );
                         pStm.EndTrans( pContext );
                         bResult = true;
@@ -632,6 +662,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.BgnTrans( pContext, S4.GetInstance() );
                         ((MainStm)pStm).m_pS4History = S4.GetInstance();
                         pStm.EndTrans( pContext );
@@ -741,6 +772,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.BgnTrans( pContext, S812.GetInstance() );
                         pStm.EndTrans( pContext );
                         bResult = true;
@@ -810,6 +842,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         if (((ContextImpl)pContext).IsIn(S82Stm.S821.GetInstance())) {
                             pStm.BgnTrans( pContext, S813.GetInstance() );
                             ((MainStm)pStm).m_S82S82Stm.Reset(pContext, pStm, S82Stm.S822.GetInstance());
@@ -841,6 +874,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.m_bIsExternTrans = true;
                         pStm.BgnTrans( pContext, S71.GetInstance() );
                         pStm.EndTrans( pContext );
@@ -925,6 +959,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.BgnTrans( pContext, MainTop.GetInstance() );
                         pStm.EndTrans( pContext );
                         bResult = true;
@@ -958,6 +993,7 @@ namespace Model {
                     pStm.m_pSourceState = GetInstance();
                     switch( (_EventId)nEventId ){
                     case _EventId.E1:{
+                        E1Params e = ( E1Params )pParams;
                         pStm.m_bIsExternTrans = true;
                         pStm.BgnTrans( pContext, S5.GetInstance() );
                         pStm.EndTrans( pContext );
@@ -1129,15 +1165,5 @@ namespace Model {
         {
         }                                                                                       
         MainStm mainStm = new MainStm();                        
-        public bool Start() {
-            mainStm.Abort(this);
-            return mainStm.Reset(this, null, null);
-        }
-        public bool EventProc(int nEventId, EventParams pParams) {
-            return mainStm.EventProc(this, nEventId, pParams);
-        }
-        public bool IsIn(TopState pState) {
-            return mainStm.IsIn(pState);
-        }
     }
 }

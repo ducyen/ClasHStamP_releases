@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import model.*;
+import base.*;
 
 public class Main {
 
@@ -13,7 +14,15 @@ public class Main {
 	        do {
 	        	n = base.TopState.InputValue("Enter event number('q': quit, 'r':restart): E");
 	        	if (n < ContextImpl._EventId.Num.ordinal()) {
-	        		ctxTest.EventProc(n, null);
+        			EventParams pParams = null;
+	        		if (n == ContextImpl._EventId.E1.ordinal()) {
+	        			pParams = new ContextImpl.E1Params() {
+	        				{
+	        					x = ContextImpl.AnEnum.Two;
+	        				}
+	        			};
+	        		}
+	        		ctxTest.EventProc(n, pParams);
 	        	}
 	        } while (n+'0' != 'q' && n+'0' != 'r');
 	    }while (n+'0' != 'q');

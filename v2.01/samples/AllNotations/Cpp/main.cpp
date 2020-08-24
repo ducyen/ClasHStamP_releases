@@ -28,7 +28,15 @@ int main() {
         ctxTest.Start();
         do {
             n = InputValue( "Enter event number('q': quit, 'r':restart): E" );
-            ctxTest.EventProc((EventId)n, nullptr);
+
+            EventParams* pParams = nullptr;
+            ContextImpl::E1Params e1Params;
+            e1Params.x = ContextImpl::AnEnum::Two;
+            if (n == ContextImpl::_EventId::E1) {
+                pParams = &e1Params;
+            }
+
+            ctxTest.EventProc((EventId)n, pParams);
         } while (n+'0' != 'q' && n+'0' != 'r');
     }while (n+'0' != 'q');
 

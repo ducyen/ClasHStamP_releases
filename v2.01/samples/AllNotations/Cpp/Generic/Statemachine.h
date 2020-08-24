@@ -3,7 +3,7 @@
 #include <cassert>
 
 class Context;
-union EventParams{};
+struct EventParams{};
 using EventId = int;
 
 class Statemachine;

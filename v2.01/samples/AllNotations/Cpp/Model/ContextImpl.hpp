@@ -5,6 +5,15 @@
 #include "Generic/Statemachine.h"
 
 class ContextImpl: public Context{
+    public:  enum AnEnum {
+        One,                                                    
+        Two,                                                    
+        Three,                                                  
+        AnEnum_NUM
+    };
+    public:  struct E1Params: public EventParams{
+        AnEnum x;                                               
+    };
     public: enum _EventId {
         E0,
         E1,
@@ -15,12 +24,29 @@ class ContextImpl: public Context{
         evNum
     };
     const std::string EventId_toString( _EventId value );
+public:
+    bool Start() {
+        mainStm.Abort(this);
+        return mainStm.Reset(this, nullptr, nullptr);
+    }
+    bool EventProc(EventId nEventId, EventParams* pParams) {
+        return mainStm.EventProc(this, nEventId, pParams);
+    }
+    template<class TState>
+    bool IsIn() {
+        return mainStm.IsInRecur<TState>();
+    }
     friend class AFriend;
     friend class Main;
     protected: virtual void protectedMethod(
     ){
     } /* ContextImpl.protectedMethod */
 
+    protected:  static boolean checkE1Params(
+        EventParams* e
+    ){
+        return ( ( E1Params* )e )->x == Two;
+    } /* ContextImpl.checkE1Params */
     class S82Stm: public Statemachine {
     public:
         class S82Top: public TopState{ using TThisState = S82Top;
@@ -57,6 +83,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->BgnTrans( pContext, S821::GetInstance() );
                     pStm->EndTrans( pContext );
                     bResult = true;
@@ -386,9 +413,12 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
-                    pStm->BgnTrans( pContext, S2::GetInstance(), InitPt1::GetInstance() );
-                    pStm->EndTrans( pContext );
-                    bResult = true;
+                    E1Params* e = ( E1Params* )pParams;
+                    if (checkE1Params(e)) {
+                        pStm->BgnTrans( pContext, S2::GetInstance(), InitPt1::GetInstance() );
+                        pStm->EndTrans( pContext );
+                        bResult = true;
+                    }
                 } break;
                 case E2:{
                     int n = InputValue("Enter condition1: ");
@@ -485,6 +515,7 @@ class ContextImpl: public Context{
                     bResult = true;
                 } break;
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->BgnTrans( pContext, S3::GetInstance() );
                     pStm->EndTrans( pContext );
                     bResult = true;
@@ -596,6 +627,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->BgnTrans( pContext, S42::GetInstance() );
                     pStm->EndTrans( pContext );
                     bResult = true;
@@ -625,6 +657,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->BgnTrans( pContext, S4::GetInstance() );
                     ((MainStm*)pStm)->m_pS4History = S4::GetInstance();
                     pStm->EndTrans( pContext );
@@ -731,6 +764,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->BgnTrans( pContext, S812::GetInstance() );
                     pStm->EndTrans( pContext );
                     bResult = true;
@@ -798,6 +832,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     if (((ContextImpl*)pContext)->IsIn<S82Stm::S821>()) {
                         pStm->BgnTrans( pContext, S813::GetInstance() );
                         ((MainStm*)pStm)->m_S82S82Stm.Reset(pContext, pStm, S82Stm::S822::GetInstance());
@@ -828,6 +863,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->m_bIsExternTrans = true;
                     pStm->BgnTrans( pContext, S71::GetInstance() );
                     pStm->EndTrans( pContext );
@@ -909,6 +945,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->BgnTrans( pContext, MainTop::GetInstance() );
                     pStm->EndTrans( pContext );
                     bResult = true;
@@ -941,6 +978,7 @@ class ContextImpl: public Context{
                 pStm->m_pSourceState = TThisState::GetInstance();
                 switch( nEventId ){
                 case E1:{
+                    E1Params* e = ( E1Params* )pParams;
                     pStm->m_bIsExternTrans = true;
                     pStm->BgnTrans( pContext, S5::GetInstance() );
                     pStm->EndTrans( pContext );
@@ -1112,16 +1150,4 @@ class ContextImpl: public Context{
     {
     }                                                                                           
     MainStm mainStm;                                            
-public:
-    bool Start() {
-        mainStm.Abort(this);
-        return mainStm.Reset(this, nullptr, nullptr);
-    }
-    bool EventProc(EventId nEventId, EventParams* pParams) {
-        return mainStm.EventProc(this, nEventId, pParams);
-    }
-    template<class TState>
-    bool IsIn() {
-        return mainStm.IsInRecur<TState>();
-    }
 };

@@ -16,42 +16,41 @@ class,"namespace [cONTAINER] {
 ","[->]}
 }
 "
-b_enum,"public  enum [Name] {
-","    [NAME],[->64][dESC]
-","    [NAME],[->64][dESC]
-",,"    [NAME]_NUM
-};
-const TCHAR* [Name]_toString( [NAME] value );
+b_enum,"[->]public  enum [Name] {
+","[->][nAME],[->64][dESC]
+","[->][nAME],[->64][dESC]
+",,"[->]    [NAME]_NUM
+[->]};
 "
-c_enum,"protected  enum [Name] {
-","    [NAME],[->64][dESC]
-","    [NAME],[->64][dESC]
-",,"    [NAME]_NUM
-};
+c_enum,"[->]protected  enum [Name] {
+","[->][nAME],[->64][dESC]
+","[->][nAME],[->64][dESC]
+",,"[->]    [NAME]_NUM
+[->]};
 "
-i_enum,"private enum [Name] {
-","    [NAME],[->64][dESC]
-","    [NAME],[->64][dESC]
+i_enum,"[->]private enum [Name] {
+","[->][nAME],[->64][dESC]
+","[->][nAME],[->64][dESC]
 ",,"    [NAME]_NUM
-};
+[->]};
 "
-b_struct,"public  struct [Name] {
-","    [tYPE] [nAME][mODIFIER];[->64][dESC]
-","    [tYPE] [nAME][mODIFIER];[->64][dESC]
-","public  struct [Name]: [TYPE]{
+b_struct,"[->]public  struct [Name] {
+","[->]public [tYPE] [nAME][mODIFIER];[->64][dESC]
+","[->]public [tYPE] [nAME][mODIFIER];[->64][dESC]
+","[->]public  class [Name]: [tYPE]{
 ","[->]};
 "
-c_struct,"protected  struct [Name] {
-","    [tYPE] [nAME][mODIFIER];[->64][dESC]
-","    [tYPE] [nAME][mODIFIER];[->64][dESC]
-","protected  struct [Name]: [TYPE]{
+c_struct,"[->]protected  struct [Name] {
+","[->]public [tYPE] [nAME][mODIFIER];[->64][dESC]
+","[->]public [tYPE] [nAME][mODIFIER];[->64][dESC]
+","[->]protected  class [Name]: [tYPE]{
 ","[->]};
 "
-i_struct,"private struct [Name] {
-","    [tYPE] [nAME][mODIFIER];[->64][dESC]
-","    [tYPE] [nAME][mODIFIER];[->64][dESC]
-","private struct [Name]: [TYPE]{
-","};
+i_struct,"[->]private struct [Name] {
+","[->]public [tYPE] [nAME][mODIFIER];[->64][dESC]
+","[->]public [tYPE] [nAME][mODIFIER];[->64][dESC]
+","[->]private class [Name]: [tYPE]{
+","[->]};
 "
 constructor,[->]public  [Name](,,,"
 [->]){","
@@ -373,7 +372,7 @@ comment,/**< [nAME] [->32]*/," * [nAME]
 ","/**
 "," */
 "
-action,"[->][NAME]_PARAMS pParams = ( [NAME]_PARAMS )pParams;
+action,"[->]    [nAME]Params e = ( [nAME]Params )pParams;
 ","[nAME]
 ","[->][nAME]
 ","[->]    pStm.BgnTrans( pContext, [nAME].GetInstance() );

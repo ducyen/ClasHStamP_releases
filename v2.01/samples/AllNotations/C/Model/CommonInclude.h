@@ -42,4 +42,8 @@ typedef struct tagString{ char buf[255]; }* String;
 #define MakeString( charBuf )       ( ( String )&( struct tagString ){ charBuf } )
 #define GetCharBuf( pStr )          ( ( pStr )->buf )
 
+typedef struct tagEventParams{
+    int cbSize;
+}EventParams;
+
 #endif//__COMMON_INCLUDE_H__

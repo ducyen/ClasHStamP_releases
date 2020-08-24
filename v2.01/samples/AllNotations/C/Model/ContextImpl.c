@@ -2,6 +2,15 @@
 #define __ContextImpl_INTERNAL__
 #include "CommonInclude.h"
 #include "ContextImpl.h"
+/* AnEnum列挙型の値から文字列に変換する関数（デバッグ用） */
+const TCHAR* AnEnum_toString( AnEnum value ){
+    switch( value ){
+    case One: return _T( "One" );
+    case Two: return _T( "Two" );
+    case Three: return _T( "Three" );
+    default: return _T( "AnEnum_UNKNOWN" );
+    }
+}
 const TCHAR* ContextImplEvent_toString( ContextImpl_EVENT value ){
     switch( value ){
     case ContextImpl_E0: return _T( "E0" );
@@ -13,11 +22,28 @@ const TCHAR* ContextImplEvent_toString( ContextImpl_EVENT value ){
     default: return _T( "ContextImpl_UNKNOWN" );
     }
 }
+BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams ){
+    return MainStm_EventProc( pContextImpl, &pContextImpl->mainStm, nEventId, pEventParams );
+}
+BOOL ContextImpl_Start( ContextImpl* pContextImpl ){
+    MainStm_Abort( pContextImpl, &pContextImpl->mainStm );
+    return MainStm_Reset( pContextImpl, &pContextImpl->mainStm, NULL, STATE_UNDEF );
+}
+BOOL ContextImpl_IsIn( ContextImpl* pContextImpl, UINT32 nState ){
+    return MainStm_IsIn( &pContextImpl->mainStm, nState );
+}
 /** @protected @memberof ContextImpl */
 static void ContextImpl_protectedMethod(
     ContextImpl* pContextImpl
 ){
 } /* ContextImpl_protectedMethod */
+
+boolean ContextImpl_checkE1Params(
+    EventParams* e
+){
+    return ( ( E1Params* )e )->x == Two;
+    #define checkE1Params ContextImpl_checkE1Params             // Just for demonstration
+} /* ContextImpl_checkE1Params */
 
 static void S82Stm_BgnTrans( ContextImpl *pS82Top, S82Stm* pStm, UINT32 targetState, UINT32 initState );
 static void S82Stm_EndTrans( ContextImpl *pS82Top, S82Stm* pStm );
@@ -50,6 +76,7 @@ static BOOL S82Stm_S822_EventProc( ContextImpl* pContextImpl, S82Stm* pStm, Cont
     pStm->base.nSourceState = S82Stm_S822;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         S82Stm_BgnTrans( pContextImpl, pStm, S82Stm_S821, STATE_UNDEF );
         S82Stm_EndTrans( pContextImpl, pStm );
         bResult = TRUE;
@@ -435,9 +462,12 @@ static BOOL MainStm_S1_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Cont
     pStm->base.nSourceState = MainStm_S1;
     switch( nEventId ){
     case ContextImpl_E1:{
-        MainStm_BgnTrans( pContextImpl, pStm, MainStm_S2, MainStm_InitPt1 );
-        MainStm_EndTrans( pContextImpl, pStm );
-        bResult = TRUE;
+        E1Params* e = ( E1Params* )pEventParams;
+        if (checkE1Params(e)) {
+            MainStm_BgnTrans( pContextImpl, pStm, MainStm_S2, MainStm_InitPt1 );
+            MainStm_EndTrans( pContextImpl, pStm );
+            bResult = TRUE;
+        }
     } break;
     case ContextImpl_E2:{
         int n = InputValue("Enter condition1: ");
@@ -528,6 +558,7 @@ static BOOL MainStm_S21_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Con
         bResult = TRUE;
     } break;
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         MainStm_BgnTrans( pContextImpl, pStm, MainStm_S3, STATE_UNDEF );
         MainStm_EndTrans( pContextImpl, pStm );
         bResult = TRUE;
@@ -627,6 +658,7 @@ static BOOL MainStm_S41_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Con
     pStm->base.nSourceState = MainStm_S41;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         MainStm_BgnTrans( pContextImpl, pStm, MainStm_S42, STATE_UNDEF );
         MainStm_EndTrans( pContextImpl, pStm );
         bResult = TRUE;
@@ -653,6 +685,7 @@ static BOOL MainStm_S42_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Con
     pStm->base.nSourceState = MainStm_S42;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         MainStm_BgnTrans( pContextImpl, pStm, MainStm_S4, STATE_UNDEF );
         pStm->nS4History = MainStm_S4;
         MainStm_EndTrans( pContextImpl, pStm );
@@ -750,6 +783,7 @@ static BOOL MainStm_S811_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Co
     pStm->base.nSourceState = MainStm_S811;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         MainStm_BgnTrans( pContextImpl, pStm, MainStm_S812, STATE_UNDEF );
         MainStm_EndTrans( pContextImpl, pStm );
         bResult = TRUE;
@@ -811,6 +845,7 @@ static BOOL MainStm_S812_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Co
     pStm->base.nSourceState = MainStm_S812;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         if (ContextImpl_IsIn( pContextImpl, S82Stm_S821 )) {
             MainStm_BgnTrans( pContextImpl, pStm, MainStm_S813, STATE_UNDEF );
             S82Stm_Reset( pContextImpl, &pStm->S82S82Stm, &pStm->base, S82Stm_S822 );
@@ -838,6 +873,7 @@ static BOOL MainStm_S7_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Cont
     pStm->base.nSourceState = MainStm_S7;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         pStm->base.bIsExternTrans = TRUE;
         MainStm_BgnTrans( pContextImpl, pStm, MainStm_S71, STATE_UNDEF );
         MainStm_EndTrans( pContextImpl, pStm );
@@ -910,6 +946,7 @@ static BOOL MainStm_S10_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Con
     pStm->base.nSourceState = MainStm_S10;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         MainStm_BgnTrans( pContextImpl, pStm, MainStm_MainTop, STATE_UNDEF );
         MainStm_EndTrans( pContextImpl, pStm );
         bResult = TRUE;
@@ -939,6 +976,7 @@ static BOOL MainStm_S5_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Cont
     pStm->base.nSourceState = MainStm_S5;
     switch( nEventId ){
     case ContextImpl_E1:{
+        E1Params* e = ( E1Params* )pEventParams;
         pStm->base.bIsExternTrans = TRUE;
         MainStm_BgnTrans( pContextImpl, pStm, MainStm_S5, STATE_UNDEF );
         MainStm_EndTrans( pContextImpl, pStm );
@@ -1181,13 +1219,3 @@ Context* ContextImpl_Copy( ContextImpl* pContextImpl, const ContextImpl* pSource
 const BaseClassVtbl gContextImplVtbl = {
     .pprotectedMethod            = ContextImpl_protectedMethod,
 };
-BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams ){
-    return MainStm_EventProc( pContextImpl, &pContextImpl->mainStm, nEventId, pEventParams );
-}
-BOOL ContextImpl_Start( ContextImpl* pContextImpl ){
-    MainStm_Abort( pContextImpl, &pContextImpl->mainStm );
-    return MainStm_Reset( pContextImpl, &pContextImpl->mainStm, NULL, STATE_UNDEF );
-}
-BOOL ContextImpl_IsIn( ContextImpl* pContextImpl, UINT32 nState ){
-    return MainStm_IsIn( &pContextImpl->mainStm, nState );
-}

@@ -395,7 +395,7 @@ comment,/**< [nAME] [->32]*/," * [nAME]
 ","/**
 "," */
 "
-action,"[->][nAME]_PARAMS* pParams = ( [nAME]_PARAMS* )pEventParams;
+action,"[->][nAME]Params* e = ( [nAME]Params* )pEventParams;
 ","[->][nAME]
 ","[->][nAME]
 ","[->][Scope]_BgnTrans( p[tYPE], pStm, [sCOPE]_[nAME], STATE_UNDEF );

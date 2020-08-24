@@ -8,6 +8,15 @@ import base.*;
 
 public  class ContextImpl extends Context
 {
+    public  enum AnEnum {
+        One,                                                    
+        Two,                                                    
+        Three,                                                  
+        AnEnum_NUM
+    };
+    public static class E1Params extends EventParams{
+        public AnEnum x;                                        
+    };
     public enum _EventId {
         E0,
         E1,
@@ -17,10 +26,25 @@ public  class ContextImpl extends Context
         E5,
         Num
     };
+    public boolean Start() {
+            mainStm.Abort(this);
+        return mainStm.Reset(this, null, null);
+    }
+    public boolean EventProc(int nEventId, EventParams pParams) {
+        return mainStm.EventProc(this, nEventId, pParams);
+    }
+    public boolean IsIn(TopState pState) {
+        return mainStm.IsIn(pState);
+    }
     protected void protectedMethod(
     ){
     } /* ContextImpl.protectedMethod */
 
+    protected static boolean checkE1Params(
+        EventParams e
+    ){
+    	return ((E1Params)e).x == AnEnum.Two;
+    } /* ContextImpl.checkE1Params */
     static class S82Stm extends Statemachine {
         public static class S82Top extends TopState {
             private static TopState singleInstance = new S82Top();
@@ -62,6 +86,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.BgnTrans( pContext, S821.GetInstance() );
                     pStm.EndTrans( pContext );
                     bResult = true;
@@ -420,9 +445,12 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
-                    pStm.BgnTrans( pContext, S2.GetInstance(), InitPt1.GetInstance() );
-                    pStm.EndTrans( pContext );
-                    bResult = true;
+                    E1Params e = ( E1Params )pParams;
+                    if (checkE1Params(e)) {
+                        pStm.BgnTrans( pContext, S2.GetInstance(), InitPt1.GetInstance() );
+                        pStm.EndTrans( pContext );
+                        bResult = true;
+                    }
                 } break;
                 case E2:{
                     int n = InputValue("Enter condition1: ");
@@ -521,6 +549,7 @@ public  class ContextImpl extends Context
                     bResult = true;
                 } break;
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.BgnTrans( pContext, S3.GetInstance() );
                     pStm.EndTrans( pContext );
                     bResult = true;
@@ -636,6 +665,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.BgnTrans( pContext, S42.GetInstance() );
                     pStm.EndTrans( pContext );
                     bResult = true;
@@ -666,6 +696,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.BgnTrans( pContext, S4.GetInstance() );
                     ((MainStm)pStm).m_pS4History = S4.GetInstance();
                     pStm.EndTrans( pContext );
@@ -775,6 +806,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.BgnTrans( pContext, S812.GetInstance() );
                     pStm.EndTrans( pContext );
                     bResult = true;
@@ -844,6 +876,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     if (((ContextImpl)pContext).IsIn(S82Stm.S821.GetInstance())) {
                         pStm.BgnTrans( pContext, S813.GetInstance() );
                         ((MainStm)pStm).m_S82S82Stm.Reset(pContext, pStm, S82Stm.S822.GetInstance());
@@ -875,6 +908,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.m_bIsExternTrans = true;
                     pStm.BgnTrans( pContext, S71.GetInstance() );
                     pStm.EndTrans( pContext );
@@ -959,6 +993,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.BgnTrans( pContext, MainTop.GetInstance() );
                     pStm.EndTrans( pContext );
                     bResult = true;
@@ -992,6 +1027,7 @@ public  class ContextImpl extends Context
                 pStm.m_pSourceState = GetInstance();
                 switch( _EventId.values()[nEventId] ){
                 case E1:{
+                    E1Params e = ( E1Params )pParams;
                     pStm.m_bIsExternTrans = true;
                     pStm.BgnTrans( pContext, S5.GetInstance() );
                     pStm.EndTrans( pContext );
@@ -1164,14 +1200,4 @@ public  class ContextImpl extends Context
 
     }                                                                                           
     MainStm mainStm = new MainStm();                            
-    public boolean Start() {
-            mainStm.Abort(this);
-        return mainStm.Reset(this, null, null);
-    }
-    public boolean EventProc(int nEventId, EventParams pParams) {
-        return mainStm.EventProc(this, nEventId, pParams);
-    }
-    public boolean IsIn(TopState pState) {
-        return mainStm.IsIn(pState);
-    }
 }
