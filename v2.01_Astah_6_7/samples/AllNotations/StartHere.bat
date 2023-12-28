@@ -15,7 +15,7 @@ pushd "..\..\"
 
 rem pushd %~dp0
 set BAT_DIR=%CD%
-set BIN_DIR="%BAT_DIR%\bin"
+set BIN_DIR="%BAT_DIR%\release\ClasHStamP.jar"
 set RES_DIR=%BAT_DIR%\samples\AllSymbols
 set LIB_DIR=%BAT_DIR%\lib
 rem popd
