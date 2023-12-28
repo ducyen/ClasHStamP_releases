@@ -67,11 +67,11 @@ typedef struct tagSharedStm {
     HdStateMachine base;
 #define SharedStm_SharedTop_Dmy                 ( 1 <<  6 )
 #define SharedStm_SharedTop                     ( SharedStm_SharedTop_Dmy | SharedStm_Shared1 | SharedStm_Shared2 )
-#define SharedStm_Entry1                        ( 1 << ( 31 -  0 ) )
-#define SharedStm_Exit1                         ( 1 << ( 31 -  1 ) )
-#define SharedStm_InitPt                        ( 1 << ( 31 -  2 ) )
+#define SharedStm_InitPt                        ( 1 << ( 31 -  0 ) )
 #define SharedStm_Shared1                       ( 1 <<  7 )
 #define SharedStm_Shared2                       ( 1 <<  8 )
+#define SharedStm_Entry1                        ( 1 << ( 31 -  1 ) )
+#define SharedStm_Exit1                         ( 1 << ( 31 -  2 ) )
 }SharedStm;
 #define SharedStm_Init() {\
     .base = HdStateMachine_Ctor( HdStateMachine_Init(SharedStm_SharedTop, SharedStm_SharedTop) ),\

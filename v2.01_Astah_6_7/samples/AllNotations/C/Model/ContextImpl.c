@@ -381,11 +381,11 @@ static BOOL SharedStm_StateDefaultTrans( ContextImpl* pContextImpl, SharedStm* p
     BOOL bResult = FALSE;
     pStm->base.nSourceState = pStm->base.nCurrentState;
     pStm->base.nLCAState = STATE_UNDEF;
-    do{   if( pStm->base.nPseudostate == SharedStm_Entry1 ){
+    do{   if( pStm->base.nCurrentState == SharedStm_SharedTop && pStm->base.nPseudostate == SharedStm_InitPt ){
         SharedStm_BgnTrans( pContextImpl, pStm, SharedStm_Shared1, STATE_UNDEF );
         SharedStm_EndTrans( pContextImpl, pStm );
         bResult = TRUE;
-    }else if( pStm->base.nCurrentState == SharedStm_SharedTop && pStm->base.nPseudostate == SharedStm_InitPt ){
+    }else if( pStm->base.nPseudostate == SharedStm_Entry1 ){
         SharedStm_BgnTrans( pContextImpl, pStm, SharedStm_Shared1, STATE_UNDEF );
         SharedStm_EndTrans( pContextImpl, pStm );
         bResult = TRUE;
@@ -789,8 +789,8 @@ static BOOL MainStm_S811_EventProc( ContextImpl* pContextImpl, MainStm* pStm, Co
         bResult = TRUE;
     } break;
     case ContextImpl_E3:{
-        if (ContextImpl_IsIn( pContextImpl, S83Stm_S831 )
-         || ContextImpl_IsIn( pContextImpl, S82Stm_S821 )) {
+        if (ContextImpl_IsIn( pContextImpl, S82Stm_S821 )
+         || ContextImpl_IsIn( pContextImpl, S83Stm_S831 )) {
             MainStm_BgnTrans( pContextImpl, pStm, MainStm_S812, STATE_UNDEF );
             S83Stm_Reset( pContextImpl, &pStm->S83S83Stm, &pStm->base, S83Stm_S832 );
             MainStm_EndTrans( pContextImpl, pStm );
