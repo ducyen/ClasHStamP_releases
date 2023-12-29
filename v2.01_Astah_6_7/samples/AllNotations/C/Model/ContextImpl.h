@@ -42,7 +42,7 @@ typedef struct tagS82Stm {
 #define S82Stm_S822                             ( 1 <<  2 )
 }S82Stm;
 #define S82Stm_Init() {\
-    .base = HdStateMachine_Ctor( HdStateMachine_Init(S82Stm_S82Top, S82Stm_S82Top) ),\
+    .base = HdStateMachine_Ctor( HdStateMachine_Init(S82Stm_S82Top, S82Stm_S82Top), ),\
 }
 /** @class S83Stm
  * @extends HdStateMachine
@@ -56,7 +56,7 @@ typedef struct tagS83Stm {
 #define S83Stm_S832                             ( 1 <<  5 )
 }S83Stm;
 #define S83Stm_Init() {\
-    .base = HdStateMachine_Ctor( HdStateMachine_Init(S83Stm_S83Top, S83Stm_S83Top) ),\
+    .base = HdStateMachine_Ctor( HdStateMachine_Init(S83Stm_S83Top, S83Stm_S83Top), ),\
 }
 /** @class SharedStm
  * @extends HdStateMachine
@@ -72,7 +72,7 @@ typedef struct tagSharedStm {
 #define SharedStm_Exit1                         ( 1 << ( 31 -  2 ) )
 }SharedStm;
 #define SharedStm_Init() {\
-    .base = HdStateMachine_Ctor( HdStateMachine_Init(SharedStm_SharedTop, SharedStm_SharedTop) ),\
+    .base = HdStateMachine_Ctor( HdStateMachine_Init(SharedStm_SharedTop, SharedStm_SharedTop), ),\
 }
 /** @class MainStm
  * @extends HdStateMachine
@@ -118,7 +118,7 @@ typedef struct tagMainStm {
 #define MainStm_S7                              ( MainStm_S7_Dmy | MainStm_S71 | MainStm_S72 )
 }MainStm;
 #define MainStm_Init() {\
-    .base = HdStateMachine_Ctor( HdStateMachine_Init(MainStm_MainTop, MainStm_MainTop) ),\
+    .base = HdStateMachine_Ctor( HdStateMachine_Init(MainStm_MainTop, MainStm_MainTop), ),\
     .S6SharedStm = SharedStm_Init(),\
     .S82S82Stm = S82Stm_Init(),\
     .S83S83Stm = S83Stm_Init(),\
