@@ -1,3 +1,4 @@
+#pragma warning(disable : 4996)
 #define __Main_INTERNAL__
 #include <stdio.h>
 
@@ -9,11 +10,11 @@ void DisplayMsg(char* pMsg);
 
 int InputValue(char* pMsg) {
     char n;
-    printf( pMsg );
-    scanf_s( "%c", &n );
+    printf( "%s", pMsg );
+    scanf( "%c", &n );
     char c = 0;
     while( c != '\n' ){
-        scanf_s( "%c", &c );
+        scanf( "%c", &c );
     }
     return n - '0';
 }
@@ -25,8 +26,8 @@ void DisplayMsg(char* pMsg) {
 int main( void ){
     ContextImpl context = ContextImpl_Ctor( ContextImpl_Init( 
         4, "", 1, 2, 3, { 0 },
-        Composition_Ctor( Composition_Init( 3 ) )
-    ) );
+        Composition_Ctor( Composition_Init( 3 ), )
+    ), );
     char n;
     do {
         ContextImpl_Start( &context );
