@@ -25,16 +25,6 @@ namespace Model {
             E5,
             ContextImplEventNum
         };
-        public bool Start() {
-            mainStm.Abort(this);
-            return mainStm.Reset(this, null, null);
-        }
-        public bool EventProc(int nEventId, EventParams pParams) {
-            return mainStm.EventProc(this, nEventId, pParams);
-        }
-        public bool IsIn(TopState pState) {
-            return mainStm.IsIn(pState);
-        }
         protected override void protectedMethod(
         ){
         } /* ContextImpl.protectedMethod */
@@ -258,9 +248,9 @@ namespace Model {
                 private static TopState singleInstance = new SharedTop();
                 public static new TopState GetInstance() { return singleInstance; }
             }
+            public class InitPt: Pseudostate<InitPt>{};
             public class Entry1: Pseudostate<Entry1>{};
             public class Exit1: Pseudostate<Exit1>{};
-            public class InitPt: Pseudostate<InitPt>{};
             public class Shared1: SharedTop {
                 private static TopState singleInstance = new Shared1();
                 public static new TopState GetInstance() { return singleInstance; }
@@ -325,11 +315,11 @@ namespace Model {
                 bool bResult = false;
                 Statemachine pStm = this;
                 do {
-                    if (m_pPseudostate == SharedStm.Entry1.GetInstance()) {
+                    if (m_pCurrentState == SharedTop.GetInstance() && m_pPseudostate == SharedStm.InitPt.GetInstance()) {
                         pStm.BgnTrans( pContext, Shared1.GetInstance() );
                         pStm.EndTrans( pContext );
                         bResult = true;
-                    } else if (m_pCurrentState == SharedTop.GetInstance() && m_pPseudostate == SharedStm.InitPt.GetInstance()) {
+                    } else if (m_pPseudostate == SharedStm.Entry1.GetInstance()) {
                         pStm.BgnTrans( pContext, Shared1.GetInstance() );
                         pStm.EndTrans( pContext );
                         bResult = true;
@@ -778,8 +768,8 @@ namespace Model {
                         bResult = true;
                     } break;
                     case _EventId.E3:{
-                        if (((ContextImpl)pContext).IsIn(S83Stm.S831.GetInstance())
-                         || ((ContextImpl)pContext).IsIn(S82Stm.S821.GetInstance())) {
+                        if (((ContextImpl)pContext).IsIn(S82Stm.S821.GetInstance())
+                         || ((ContextImpl)pContext).IsIn(S83Stm.S831.GetInstance())) {
                             pStm.BgnTrans( pContext, S812.GetInstance() );
                             ((MainStm)pStm).m_S83S83Stm.Reset(pContext, pStm, S83Stm.S832.GetInstance());
                             pStm.EndTrans( pContext );
@@ -1153,6 +1143,16 @@ namespace Model {
             }
             public MainStm(): base(MainTop.GetInstance(), MainTop.GetInstance()) {}
         };
+        public bool Start() {
+            mainStm.Abort(this);
+            return mainStm.Reset(this, null, null);
+        }
+        public bool EventProc(int nEventId, EventParams pParams) {
+            return mainStm.EventProc(this, nEventId, pParams);
+        }
+        public bool IsIn(TopState pState) {
+            return mainStm.IsIn(pState);
+        }
         public  ContextImpl(
             int _derivableAttribute,
             String _publicAttribute,

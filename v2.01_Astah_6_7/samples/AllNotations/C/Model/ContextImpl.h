@@ -23,8 +23,6 @@ typedef enum tagContextImplEvent {
     ContextImpl_EVENT_NUM
 }ContextImpl_EVENT;
 const TCHAR* ContextImplEvent_toString( ContextImpl_EVENT value );
-BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams );
-BOOL ContextImpl_Start( ContextImpl* pContextImpl );
 #endif//__ContextImpl_H__
 #if !defined( ContextImpl_Init ) && ( defined( __ContextImpl_INTERNAL__ )  || defined( __AFriend_INTERNAL__ )  || defined( __Main_INTERNAL__ )  )
 #define __Context_INTERNAL__
@@ -126,6 +124,8 @@ typedef struct tagMainStm {
     .S83S83Stm = S83Stm_Init(),\
     .S9SharedStm = SharedStm_Init(),\
 }
+BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams );
+BOOL ContextImpl_Start( ContextImpl* pContextImpl );
 /** @memberof ContextImpl
  * @brief ContextImpl auto-generated constructor
  */

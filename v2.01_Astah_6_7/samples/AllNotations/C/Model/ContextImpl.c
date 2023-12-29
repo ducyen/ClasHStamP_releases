@@ -22,16 +22,6 @@ const TCHAR* ContextImplEvent_toString( ContextImpl_EVENT value ){
     default: return _T( "ContextImpl_UNKNOWN" );
     }
 }
-BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams ){
-    return MainStm_EventProc( pContextImpl, &pContextImpl->mainStm, nEventId, pEventParams );
-}
-BOOL ContextImpl_Start( ContextImpl* pContextImpl ){
-    MainStm_Abort( pContextImpl, &pContextImpl->mainStm );
-    return MainStm_Reset( pContextImpl, &pContextImpl->mainStm, NULL, STATE_UNDEF );
-}
-BOOL ContextImpl_IsIn( ContextImpl* pContextImpl, UINT32 nState ){
-    return MainStm_IsIn( &pContextImpl->mainStm, nState );
-}
 /** @protected @memberof ContextImpl */
 static void ContextImpl_protectedMethod(
     ContextImpl* pContextImpl
@@ -1211,6 +1201,16 @@ static BOOL MainStm_Abort( ContextImpl* pContextImpl, MainStm* pStm ) {
 }
 int MainStm_IsFinished(MainStm* pMainStm){
     return pMainStm->base.nCurrentState == MainStm_MainTop && pMainStm->base.nCurrentState == pMainStm->base.nPseudostate;
+}
+BOOL ContextImpl_EventProc( ContextImpl* pContextImpl, ContextImpl_EVENT nEventId, void* pEventParams ){
+    return MainStm_EventProc( pContextImpl, &pContextImpl->mainStm, nEventId, pEventParams );
+}
+BOOL ContextImpl_Start( ContextImpl* pContextImpl ){
+    MainStm_Abort( pContextImpl, &pContextImpl->mainStm );
+    return MainStm_Reset( pContextImpl, &pContextImpl->mainStm, NULL, STATE_UNDEF );
+}
+BOOL ContextImpl_IsIn( ContextImpl* pContextImpl, UINT32 nState ){
+    return MainStm_IsIn( &pContextImpl->mainStm, nState );
 }
 Context* ContextImpl_Copy( ContextImpl* pContextImpl, const ContextImpl* pSource ){
     Context_Copy( ( Context* )pContextImpl, ( Context* )pSource );

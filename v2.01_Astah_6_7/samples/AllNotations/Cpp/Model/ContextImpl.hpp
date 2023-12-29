@@ -24,18 +24,6 @@ class ContextImpl: public Context{
         evNum
     };
     const std::string EventId_toString( _EventId value );
-public:
-    bool Start() {
-        mainStm.Abort(this);
-        return mainStm.Reset(this, nullptr, nullptr);
-    }
-    bool EventProc(EventId nEventId, EventParams* pParams) {
-        return mainStm.EventProc(this, nEventId, pParams);
-    }
-    template<class TState>
-    bool IsIn() {
-        return mainStm.IsInRecur<TState>();
-    }
     friend class AFriend;
     friend class Main;
     protected: virtual void protectedMethod(
@@ -261,9 +249,9 @@ public:
         class SharedTop: public TopState{ using TThisState = SharedTop;
             public: static TopState* GetInstance() { static TThisState singleInstance; return &singleInstance; }
         };
+        class InitPt: public Pseudostate<InitPt>{};
         class Entry1: public Pseudostate<Entry1>{};
         class Exit1: public Pseudostate<Exit1>{};
-        class InitPt: public Pseudostate<InitPt>{};
         class Shared1: public SharedTop { using TThisState = Shared1; using TSuperState = SharedTop;
             public: static TopState* GetInstance() { static TThisState singleInstance; return &singleInstance; }
             virtual void Entry( Context* pContext, Statemachine* pStm ){
@@ -326,11 +314,11 @@ public:
             bool bResult = false;
             Statemachine* pStm = this;
             do {
-                if (m_pPseudostate == SharedStm::Entry1::GetInstance()) {
+                if (m_pCurrentState == SharedTop::GetInstance() && m_pPseudostate == SharedStm::InitPt::GetInstance()) {
                     pStm->BgnTrans( pContext, Shared1::GetInstance() );
                     pStm->EndTrans( pContext );
                     bResult = true;
-                } else if (m_pCurrentState == SharedTop::GetInstance() && m_pPseudostate == SharedStm::InitPt::GetInstance()) {
+                } else if (m_pPseudostate == SharedStm::Entry1::GetInstance()) {
                     pStm->BgnTrans( pContext, Shared1::GetInstance() );
                     pStm->EndTrans( pContext );
                     bResult = true;
@@ -770,8 +758,8 @@ public:
                     bResult = true;
                 } break;
                 case E3:{
-                    if (((ContextImpl*)pContext)->IsIn<S83Stm::S831>()
-                 || ((ContextImpl*)pContext)->IsIn<S82Stm::S821>()) {
+                    if (((ContextImpl*)pContext)->IsIn<S82Stm::S821>()
+                 || ((ContextImpl*)pContext)->IsIn<S83Stm::S831>()) {
                         pStm->BgnTrans( pContext, S812::GetInstance() );
                         ((MainStm*)pStm)->m_S83S83Stm.Reset(pContext, pStm, S83Stm::S832::GetInstance());
                         pStm->EndTrans( pContext );
@@ -1139,6 +1127,18 @@ public:
         }
         MainStm(): Statemachine(MainTop::GetInstance(), MainTop::GetInstance()) {}
     };
+public:
+    bool Start() {
+        mainStm.Abort(this);
+        return mainStm.Reset(this, nullptr, nullptr);
+    }
+    bool EventProc(EventId nEventId, EventParams* pParams) {
+        return mainStm.EventProc(this, nEventId, pParams);
+    }
+    template<class TState>
+    bool IsIn() {
+        return mainStm.IsInRecur<TState>();
+    }
     public:  ContextImpl(
         int _derivableAttribute,
         String _publicAttribute,
